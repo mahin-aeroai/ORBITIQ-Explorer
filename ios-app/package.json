@@ -1,0 +1,22 @@
+{
+  "name": "orbitiq-explorer-ios",
+  "version": "1.0.0",
+  "description": "ORBITIQ Explorer iOS app (Capacitor)",
+  "scripts": {
+    "add-ios": "npx cap add ios",
+    "sync": "npx cap sync ios",
+    "open": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@capacitor/status-bar": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0",
+    "@capacitor/app": "^6.0.0",
+    "@capacitor/haptics": "^6.0.0",
+    "@capacitor/keyboard": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  }
+}

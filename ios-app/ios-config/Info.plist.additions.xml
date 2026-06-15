@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Place the keys below inside your Xcode project's Info.plist
+  (ios/App/App/Info.plist after running: npx cap add ios)
+
+  These are additions on top of the default Capacitor Info.plist.
+-->
+<plist version="1.0">
+<dict>
+    <!-- App display name -->
+    <key>CFBundleDisplayName</key>
+    <string>ORBITIQ</string>
+
+    <!-- App version -->
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+
+    <!-- Status bar -->
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleLightContent</string>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
+
+    <!-- Orientation — portrait + landscape for iPad -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+
+    <!-- Allow loading from NASA/CelesTrak APIs -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+
+    <!-- Privacy descriptions (required by App Store) -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>ORBITIQ uses your location to show ISS pass predictions for your area.</string>
+
+    <!-- Launch screen -->
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+
+    <!-- Required device capabilities -->
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>armv7</string>
+    </array>
+</dict>
+</plist>
