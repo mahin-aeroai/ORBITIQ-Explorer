@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+      - NEXT_PUBLIC_NASA_API_KEY=${NASA_API_KEY}
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://orbitiq:orbitiq@db:5432/orbitiq
+      - NASA_API_KEY=${NASA_API_KEY:-DEMO_KEY}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=orbitiq
+      - POSTGRES_PASSWORD=orbitiq
+      - POSTGRES_DB=orbitiq
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:
