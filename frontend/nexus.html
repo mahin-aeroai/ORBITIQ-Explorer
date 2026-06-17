@@ -409,25 +409,25 @@ const tabMap={
 // SYSTEM PROMPTS — all return structured JSON
 const PROMPTS={
   archive:`You are ORBITIQ NEXUS aerospace historian. Return ONLY a raw JSON object (no markdown, no backticks, no explanation). Structure:
-{"headline":"exciting headline max 12 words","classification":"ARCHIVE RECORD","sections":[{"icon":"🛸","title":"EXECUTIVE SUMMARY","type":"summary","content":"3 sentences. Most dramatic fact first. Make the reader lean in."},{"icon":"📜","title":"ORIGIN STORY","type":"story","content":"Where it came from. Who built it. The stakes. The drama. 3-4 sentences vivid prose."},{"icon":"⚙️","title":"TECHNICAL SPECS","type":"specs","bullets":["Thrust / Power: value and significance","Speed / Altitude: value","Dimensions: value","Key material or innovation: detail","Record or first: description"]},{"icon":"🎯","title":"IN ACTION","type":"story","content":"What it actually did. Real missions. Real moments. Numbers and names. 3 sentences."},{"icon":"🔥","title":"DEFINING MOMENT","type":"highlight","content":"One dramatic sentence. The moment that defined this subject forever. Maximum impact."},{"icon":"🌍","title":"WHY IT MATTERS","type":"story","content":"Geopolitical, technological, human impact. 2-3 sentences."},{"icon":"🔭","title":"WHAT COMES NEXT","type":"story","content":"Legacy and successor programs. 2 sentences."}],"verdict":"One sentence that nails everything. Bold. Memorable."}`,
+{"headline":"exciting headline max 12 words","classification":"ARCHIVE RECORD","sections":[{"icon":"🛸","title":"EXECUTIVE SUMMARY","type":"summary","content":"2 vivid sentences. Most dramatic fact first."},{"icon":"📜","title":"ORIGIN STORY","type":"story","content":"2 sentences. Origin, who, why. Be vivid."},{"icon":"⚙️","title":"TECHNICAL SPECS","type":"specs","bullets":["Thrust / Power: value and significance","Speed / Altitude: value","Dimensions: value","Key material or innovation: detail","Record or first: description"]},{"icon":"🎯","title":"IN ACTION","type":"story","content":"2 sentences. Real missions, real numbers."},{"icon":"🔥","title":"DEFINING MOMENT","type":"highlight","content":"One unforgettable sentence. Maximum drama."},{"icon":"🌍","title":"WHY IT MATTERS","type":"story","content":"2 sentences. Impact and significance."},{"icon":"🔭","title":"WHAT COMES NEXT","type":"story","content":"1 sentence. What it changed forever."}],"verdict":"One sentence that nails everything. Bold. Memorable."}`,
 
   technical:`You are ORBITIQ NEXUS systems engineer. Return ONLY raw JSON:
-{"headline":"Technical designation and peak capability","classification":"TECHNICAL DEEP DIVE","sections":[{"icon":"🚀","title":"PROPULSION","type":"specs","bullets":["Engine: model — thrust figure — ISP","Fuel: type — burn time","Thrust-to-weight: ratio and significance","Innovation: what makes this propulsion remarkable"]},{"icon":"✈️","title":"AIRFRAME AND STRUCTURES","type":"specs","bullets":["Wingspan or diameter: figure","Length and empty weight: figures","Primary material: composites or alloys","Structural innovation: description","Load factor or g-limit: figure"]},{"icon":"🧭","title":"GUIDANCE AND CONTROL","type":"story","content":"How it navigates. Sensors used. Accuracy figures. What was groundbreaking about this system."},{"icon":"📡","title":"SENSORS AND AVIONICS","type":"specs","bullets":["Primary sensor: type and range","Radar: frequency and capability","Computing: processor and software detail","Comms: frequency band and range"]},{"icon":"🔬","title":"ENGINEERING BREAKTHROUGH","type":"highlight","content":"The one thing this machine did that had never been done before. One vivid sentence."},{"icon":"📈","title":"PERFORMANCE ENVELOPE","type":"specs","bullets":["Top speed: figure and Mach equivalent","Service ceiling: figure","Range or endurance: figure","Payload or weapons load: figure","Crew: number and roles"]}],"verdict":"Engineering verdict in one sentence."}`,
+{"headline":"Technical designation and peak capability","classification":"TECHNICAL DEEP DIVE","sections":[{"icon":"🚀","title":"PROPULSION","type":"specs","bullets":["Engine: model — thrust figure — ISP","Fuel: type — burn time","Thrust-to-weight: ratio and significance","Innovation: what makes this propulsion remarkable"]},{"icon":"✈️","title":"AIRFRAME AND STRUCTURES","type":"specs","bullets":["Wingspan or diameter: figure","Length and empty weight: figures","Primary material: composites or alloys","Structural innovation: description","Load factor or g-limit: figure"]},{"icon":"🧭","title":"GUIDANCE AND CONTROL","type":"story","content":"2 sentences. Navigation method and key precision figure."},{"icon":"📡","title":"SENSORS AND AVIONICS","type":"specs","bullets":["Primary sensor: type and range","Radar: frequency and capability","Computing: processor and software detail","Comms: frequency band and range"]},{"icon":"🔬","title":"ENGINEERING BREAKTHROUGH","type":"highlight","content":"One sentence. The engineering first that shocked the world."},{"icon":"📈","title":"PERFORMANCE ENVELOPE","type":"specs","bullets":["Top speed: figure and Mach equivalent","Service ceiling: figure","Range or endurance: figure","Payload or weapons load: figure","Crew: number and roles"]}],"verdict":"Engineering verdict in one sentence."}`,
 
   failure:`You are ORBITIQ NEXUS accident investigator. Return ONLY raw JSON:
-{"headline":"The disaster that rewrote the rules","classification":"FAILURE ANALYSIS","sections":[{"icon":"💥","title":"WHAT HAPPENED","type":"summary","content":"The incident in 3 sentences. When, where, what was lost. Maximum impact."},{"icon":"⏱️","title":"SEQUENCE OF EVENTS","type":"timeline_list","bullets":["T+00:00 — starting condition description","T+XX:XX — first anomaly detected","T+XX:XX — critical threshold crossed","T+XX:XX — point of no return","T+XX:XX — outcome"]},{"icon":"🔍","title":"ROOT CAUSE","type":"highlight","content":"The real reason this happened. Not the symptom — the cause. One unflinching paragraph."},{"icon":"🧠","title":"CONTRIBUTING FACTORS","type":"specs","bullets":["Factor: description and how it amplified the failure","Factor: description and how it amplified the failure","Factor: description and how it amplified the failure"]},{"icon":"🛠️","title":"WHAT CHANGED","type":"specs","bullets":["Change: what was redesigned and why","Change: what procedure was rewritten","Change: what culture shifted"]},{"icon":"🏛️","title":"THE GIFT OF TRAGEDY","type":"story","content":"What aerospace could only have learned this way. The knowledge bought at terrible cost. 3 sentences."}],"verdict":"The truth this disaster forced humanity to face."}`,
+{"headline":"The disaster that rewrote the rules","classification":"FAILURE ANALYSIS","sections":[{"icon":"💥","title":"WHAT HAPPENED","type":"summary","content":"2 sentences. When, where, what was lost."},{"icon":"⏱️","title":"SEQUENCE OF EVENTS","type":"timeline_list","bullets":["T+00:00 — starting condition description","T+XX:XX — first anomaly detected","T+XX:XX — critical threshold crossed","T+XX:XX — point of no return","T+XX:XX — outcome"]},{"icon":"🔍","title":"ROOT CAUSE","type":"highlight","content":"One unflinching paragraph. Root cause only."},{"icon":"🧠","title":"CONTRIBUTING FACTORS","type":"specs","bullets":["Factor: description and how it amplified the failure","Factor: description and how it amplified the failure","Factor: description and how it amplified the failure"]},{"icon":"🛠️","title":"WHAT CHANGED","type":"specs","bullets":["Change: what was redesigned and why","Change: what procedure was rewritten","Change: what culture shifted"]},{"icon":"🏛️","title":"THE GIFT OF TRAGEDY","type":"story","content":"2 sentences. The lesson paid for in lives."}],"verdict":"The truth this disaster forced humanity to face."}`,
 
   timeline:`You are ORBITIQ NEXUS historian. Return ONLY raw JSON:
-{"headline":"The complete evolutionary saga","classification":"TIMELINE EVOLUTION","sections":[{"icon":"🌱","title":"THE BEGINNING","type":"story","content":"Origin. The problem being solved. The first attempt. Who and why."},{"icon":"📅","title":"EVOLUTION LINE","type":"timeline_list","bullets":["[YEAR] Name — what changed, what breakthrough, specs improvement","[YEAR] Name — next leap, what drove it, new capability","[YEAR] Name — operational, real impact, limitation discovered","[YEAR] Name — refinement, lessons applied, performance peak","[YEAR] Name — current generation, where things stand","[FUTURE] Name — what is coming, what it will do"]},{"icon":"🔄","title":"DEAD ENDS","type":"story","content":"The paths abandoned. The programs killed. What was tried and failed. 2 sentences."},{"icon":"⚡","title":"THE GREAT LEAP","type":"highlight","content":"The single generation that made everything before it obsolete overnight. Name it. Describe the shock."},{"icon":"📊","title":"HOW FAR WE CAME","type":"specs","bullets":["Key metric: from original value to current value — factor improvement","Key metric: from original value to current value — factor improvement","Key metric: from original value to current value — factor improvement"]}],"verdict":"What this journey reveals about human ambition."}`,
+{"headline":"The complete evolutionary saga","classification":"TIMELINE EVOLUTION","sections":[{"icon":"🌱","title":"THE BEGINNING","type":"story","content":"2 sentences. Origin and first attempt."},{"icon":"📅","title":"EVOLUTION LINE","type":"timeline_list","bullets":["[YEAR] Name — what changed, what breakthrough, specs improvement","[YEAR] Name — next leap, what drove it, new capability","[YEAR] Name — operational, real impact, limitation discovered","[YEAR] Name — refinement, lessons applied, performance peak","[YEAR] Name — current generation, where things stand","[FUTURE] Name — what is coming, what it will do"]},{"icon":"🔄","title":"DEAD ENDS","type":"story","content":"1 sentence. Biggest dead end."},{"icon":"⚡","title":"THE GREAT LEAP","type":"highlight","content":"The single generation that made everything before it obsolete overnight. Name it. Describe the shock."},{"icon":"📊","title":"HOW FAR WE CAME","type":"specs","bullets":["Key metric: from original value to current value — factor improvement","Key metric: from original value to current value — factor improvement","Key metric: from original value to current value — factor improvement"]}],"verdict":"What this journey reveals about human ambition."}`,
 
   forecast:`You are ORBITIQ NEXUS intelligence analyst. Return ONLY raw JSON:
-{"headline":"What the next 25 years hold","classification":"FUTURE FORECAST","sections":[{"icon":"📡","title":"WHERE WE STAND NOW","type":"summary","content":"Current state 2025. What is operational, funded, in testing. 3 sentences."},{"icon":"⚡","title":"2026 TO 2030","type":"specs","bullets":["Milestone: description — probability assessment","Milestone: description — probability assessment","Program: expected outcome and timeline"]},{"icon":"🚀","title":"2031 TO 2040","type":"story","content":"The transformation decade. What becomes routine. What gets abandoned. What surprises us."},{"icon":"🌌","title":"2041 TO 2050","type":"specs","bullets":["Capability: description — enabling technology needed","Capability: description — enabling technology needed","Wildcard: if this happens then that changes"]},{"icon":"🌍","title":"WHO WINS","type":"highlight","content":"The geopolitical verdict. Which nation or company leads. What the balance of power looks like."},{"icon":"💡","title":"BLACK SWAN","type":"story","content":"The unexpected breakthrough or catastrophe that could flip everything. The scenario no one is planning for."}],"verdict":"The one thing you must understand about where this is heading."}`,
+{"headline":"What the next 25 years hold","classification":"FUTURE FORECAST","sections":[{"icon":"📡","title":"WHERE WE STAND NOW","type":"summary","content":"2 sentences. Current state 2025."},{"icon":"⚡","title":"2026 TO 2030","type":"specs","bullets":["Milestone: description — probability assessment","Milestone: description — probability assessment","Program: expected outcome and timeline"]},{"icon":"🚀","title":"2031 TO 2040","type":"story","content":"2 sentences. What transforms."},{"icon":"🌌","title":"2041 TO 2050","type":"specs","bullets":["Capability: description — enabling technology needed","Capability: description — enabling technology needed","Wildcard: if this happens then that changes"]},{"icon":"🌍","title":"WHO WINS","type":"highlight","content":"One sentence. Who leads and why."},{"icon":"💡","title":"BLACK SWAN","type":"story","content":"One sentence. The black swan scenario."}],"verdict":"The one thing you must understand about where this is heading."}`,
 
   crew:`You are ORBITIQ NEXUS personnel archivist. Return ONLY raw JSON:
-{"headline":"The human who changed the sky","classification":"PERSONNEL FILE","sections":[{"icon":"👤","title":"WHO THEY WERE","type":"summary","content":"Born where, when, into what world. What made them extraordinary from day one. 3 vivid sentences."},{"icon":"🎓","title":"FORMATION","type":"specs","bullets":["Education: degree, institution, year graduated","Military: branch, years served, peak rank","Key training: programs completed","Specialty: what made them the best"]},{"icon":"🚀","title":"MISSION RECORD","type":"timeline_list","bullets":["Mission name — date — role aboard — what they did","Mission name — date — duration — key achievement","Mission name — date — significance to aerospace history"]},{"icon":"🔥","title":"THE MOMENT","type":"highlight","content":"The single act or decision that defines their legacy. Describe it like you were there."},{"icon":"🏆","title":"WHAT THEY EARNED","type":"specs","bullets":["Award: name — for what specific act","Record: what they were first or best at","Contribution: the thing aerospace uses today because of them"]},{"icon":"🌟","title":"LEGACY","type":"story","content":"What they changed. Who they inspired. How the sky is different because they flew."}],"verdict":"Why history will never forget this name."}`,
+{"headline":"The human who changed the sky","classification":"PERSONNEL FILE","sections":[{"icon":"👤","title":"WHO THEY WERE","type":"summary","content":"2 vivid sentences. Origin and what made them exceptional."},{"icon":"🎓","title":"FORMATION","type":"specs","bullets":["Education: degree, institution, year graduated","Military: branch, years served, peak rank","Key training: programs completed","Specialty: what made them the best"]},{"icon":"🚀","title":"MISSION RECORD","type":"timeline_list","bullets":["Mission name — date — role aboard — what they did","Mission name — date — duration — key achievement","Mission name — date — significance to aerospace history"]},{"icon":"🔥","title":"THE MOMENT","type":"highlight","content":"One sentence. The defining moment, maximum drama."},{"icon":"🏆","title":"WHAT THEY EARNED","type":"specs","bullets":["Award: name — for what specific act","Record: what they were first or best at","Contribution: the thing aerospace uses today because of them"]},{"icon":"🌟","title":"LEGACY","type":"story","content":"2 sentences. Legacy and inspiration."}],"verdict":"Why history will never forget this name."}`,
 
   compare:`You are ORBITIQ NEXUS intelligence analyst. Return ONLY raw JSON:
-{"headline":"The definitive face-off","classification":"COMPARATIVE ANALYSIS","sections":[{"icon":"📊","title":"THE CONTEST","type":"summary","content":"What these two represent. The fundamental difference in philosophy, capability, or strategy. 2 sentences."},{"icon":"🏛️","title":"HOW THEY GOT HERE","type":"timeline_list","bullets":["Entity A: founding or origin — first major milestone","Entity A: breakthrough — turning point in capability","Entity B: founding or origin — first major milestone","Entity B: breakthrough — turning point in capability"]},{"icon":"⚙️","title":"HEAD TO HEAD","type":"specs","bullets":["Speed or output: A value vs B value — edge and why","Range or scale: A value vs B value — edge and why","Budget or resources: A figure vs B figure — implication","Success rate or reliability: A vs B — significance","Key advantage of A over B: description","Key advantage of B over A: description"]},{"icon":"🏆","title":"GREATEST ACHIEVEMENT","type":"story","content":"Each side biggest moment. The achievement that defines them. What it proved."},{"icon":"🔥","title":"THE VERDICT","type":"highlight","content":"Who leads. In what dimensions. By how much. And why that matters for the next 10 years."}],"verdict":"Final call — one sentence, no hedging."}`
+{"headline":"The definitive face-off","classification":"COMPARATIVE ANALYSIS","sections":[{"icon":"📊","title":"THE CONTEST","type":"summary","content":"2 sentences. Core difference."},{"icon":"🏛️","title":"HOW THEY GOT HERE","type":"timeline_list","bullets":["Entity A: founding or origin — first major milestone","Entity A: breakthrough — turning point in capability","Entity B: founding or origin — first major milestone","Entity B: breakthrough — turning point in capability"]},{"icon":"⚙️","title":"HEAD TO HEAD","type":"specs","bullets":["Speed or output: A value vs B value — edge and why","Range or scale: A value vs B value — edge and why","Budget or resources: A figure vs B figure — implication","Success rate or reliability: A vs B — significance","Key advantage of A over B: description","Key advantage of B over A: description"]},{"icon":"🏆","title":"GREATEST ACHIEVEMENT","type":"story","content":"2 sentences. One per entity."},{"icon":"🔥","title":"THE VERDICT","type":"highlight","content":"One bold sentence. Who leads and why it matters."}],"verdict":"Final call — one sentence, no hedging."}`
 };
 
 const THINK_LINES=[
@@ -461,34 +461,54 @@ async function run(){
   btn.disabled=true;
 
   try{
+    // Stream the response for instant feedback
     const res=await fetch(PROXY,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-6',
-        max_tokens:1000,
+        max_tokens:800,
         system:PROMPTS[mode],
-        messages:[{role:'user',content:`NEXUS QUERY: ${q}\n\nReturn ONLY the raw JSON object. No markdown fences. No text before or after. Pure JSON starting with { and ending with }.`}]
+        messages:[{role:'user',content:`NEXUS QUERY: ${q}\n\nReturn ONLY a raw JSON object. No markdown. No backticks. No explanation. Start with { end with }.`}]
       })
     });
 
     const data=await res.json();
 
     if(data.error||!data.content){
-      const msg=data.error?`${data.error.type}: ${data.error.message}`:`Bad response: ${JSON.stringify(data).slice(0,200)}`;
-      ra.innerHTML=`<div class="err"><i class="ti ti-alert-circle"></i> NEXUS ERROR: ${x(msg)}</div>`;
+      const msg=data.error?`${data.error.type}: ${data.error.message}`:`Error: ${JSON.stringify(data).slice(0,300)}`;
+      ra.innerHTML=`<div class="err"><i class="ti ti-alert-circle"></i> ${x(msg)}</div>`;
       btn.disabled=false; return;
     }
 
     let raw=data.content.map(b=>b.text||'').join('').trim();
-    raw=raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+
+    // Strip any markdown fences robustly
+    raw=raw.replace(/^\s*```+json\s*/i,'').replace(/^\s*```+\s*/,'').replace(/\s*```+\s*$/,'').trim();
+
+    // Extract JSON object even if there's surrounding text
+    const jsonStart=raw.indexOf('{');
+    const jsonEnd=raw.lastIndexOf('}');
+    if(jsonStart>=0 && jsonEnd>jsonStart){
+      raw=raw.slice(jsonStart, jsonEnd+1);
+    }
 
     let parsed;
-    try{ parsed=JSON.parse(raw); }
-    catch(e){
-      // Fallback: plain display
-      ra.innerHTML=`<div class="sec t-story"><div class="sec-hdr"><span class="sec-ico">📋</span><span class="sec-ttl">${x(q.slice(0,50))}</span></div><div class="sec-body" style="font-size:13px;color:var(--t2);line-height:1.8;white-space:pre-wrap">${x(raw)}</div></div>`;
-      btn.disabled=false; return;
+    try{
+      parsed=JSON.parse(raw);
+    } catch(e){
+      // Try a second time with aggressive cleanup
+      try{
+        // Fix common issues: unescaped quotes inside strings, trailing commas
+        const cleaned=raw
+          .replace(/,\s*}/g,'}')
+          .replace(/,\s*]/g,']');
+        parsed=JSON.parse(cleaned);
+      } catch(e2){
+        // Final fallback: render raw as nicely formatted plain text
+        ra.innerHTML=buildPlainFallback(q, raw);
+        btn.disabled=false; return;
+      }
     }
 
     hist.unshift({q,mode,time:new Date().toLocaleTimeString()});
@@ -572,6 +592,42 @@ function getRelated(q){
   if(l.includes('f-22')||l.includes('raptor')) return ['F-35 Lightning II technical deep dive','B-21 Raider stealth bomber next generation','NGAD sixth generation fighter 2035 forecast'];
   if(l.includes('gagarin')) return ['Alan Shepard — America first astronaut','Valentina Tereshkova — first woman in space','Vostok program complete archive'];
   return ['Apollo 11 — Moon landing archive','SR-71 Blackbird — fastest aircraft ever built','James Webb Space Telescope — eye of the cosmos'];
+}
+
+function buildPlainFallback(q, raw){
+  // Parse what we can as sections by splitting on common patterns
+  const lines = raw.split('\n').filter(l=>l.trim());
+  const sections = [];
+  let currentSection = null;
+  
+  lines.forEach(line=>{
+    line = line.trim();
+    if(!line) return;
+    // Detect section-like headers (ALL CAPS or starts with emoji)
+    if(/^[\u{1F300}-\u{1FFFF}]/u.test(line) || (line.length < 60 && line === line.toUpperCase() && line.length > 3)){
+      if(currentSection) sections.push(currentSection);
+      currentSection = {title: line, lines: []};
+    } else if(currentSection){
+      currentSection.lines.push(line);
+    } else {
+      sections.push({title:'', lines:[line]});
+    }
+  });
+  if(currentSection) sections.push(currentSection);
+
+  if(sections.length > 1){
+    return sections.map(s=>`
+      <div class="sec t-story">
+        ${s.title ? `<div class="sec-hdr"><span class="sec-ico">📋</span><span class="sec-ttl">${x(s.title.slice(0,50))}</span></div>` : ''}
+        <div class="sec-body">${s.lines.map(l=>`<div style="margin-bottom:8px">${x(l)}</div>`).join('')}</div>
+      </div>`).join('');
+  }
+  
+  // Pure fallback
+  return `<div class="sec t-story">
+    <div class="sec-hdr"><span class="sec-ico">📋</span><span class="sec-ttl">${x(q.slice(0,50))}</span></div>
+    <div class="sec-body" style="font-size:13px;color:var(--t2);line-height:1.85;white-space:pre-wrap">${x(raw)}</div>
+  </div>`;
 }
 
 function x(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
