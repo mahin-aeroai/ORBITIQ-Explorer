@@ -483,31 +483,52 @@ async function run(){
 
     let raw=data.content.map(b=>b.text||'').join('').trim();
 
-    // Strip any markdown fences robustly
+    // Strip markdown fences
     raw=raw.replace(/^\s*```+json\s*/i,'').replace(/^\s*```+\s*/,'').replace(/\s*```+\s*$/,'').trim();
 
-    // Extract JSON object even if there's surrounding text
+    // Extract just the JSON object
     const jsonStart=raw.indexOf('{');
     const jsonEnd=raw.lastIndexOf('}');
-    if(jsonStart>=0 && jsonEnd>jsonStart){
-      raw=raw.slice(jsonStart, jsonEnd+1);
-    }
+    if(jsonStart>=0 && jsonEnd>jsonStart) raw=raw.slice(jsonStart,jsonEnd+1);
 
     let parsed;
     try{
       parsed=JSON.parse(raw);
     } catch(e){
-      // Try a second time with aggressive cleanup
+      // Emojis in JSON keys/values can break parsing in some engines.
+      // Strategy: use a custom tokeniser that handles emoji icon fields.
       try{
-        // Fix common issues: unescaped quotes inside strings, trailing commas
-        const cleaned=raw
-          .replace(/,\s*}/g,'}')
-          .replace(/,\s*]/g,']');
-        parsed=JSON.parse(cleaned);
+        // Replace emoji values in "icon":"<emoji>" with safe placeholders, parse, restore
+        const iconMap={};
+        let idx=0;
+        const safeRaw=raw.replace(/"icon":"([^"]*)"/g,(match,emoji)=>{
+          const key='__EMOJI_'+idx+'__';
+          iconMap[key]=emoji;
+          idx++;
+          return `"icon":"${key}"`;
+        });
+        const safeParsed=JSON.parse(safeRaw);
+        // Restore emojis
+        const restoreEmojis=(obj)=>{
+          if(typeof obj==='string') return iconMap[obj]||obj;
+          if(Array.isArray(obj)) return obj.map(restoreEmojis);
+          if(obj&&typeof obj==='object'){
+            const out={};
+            for(const k in obj) out[k]=restoreEmojis(obj[k]);
+            return out;
+          }
+          return obj;
+        };
+        parsed=restoreEmojis(safeParsed);
       } catch(e2){
-        // Final fallback: render raw as nicely formatted plain text
-        ra.innerHTML=buildPlainFallback(q, raw);
-        btn.disabled=false; return;
+        // Last resort: strip all non-ASCII from keys only and try
+        try{
+          const stripped=raw.replace(/"icon":"[^"]*"/g,'"icon":"▸"');
+          parsed=JSON.parse(stripped);
+        } catch(e3){
+          ra.innerHTML=buildPlainFallback(q,raw);
+          btn.disabled=false; return;
+        }
       }
     }
 
