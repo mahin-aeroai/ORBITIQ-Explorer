@@ -552,7 +552,15 @@
       });
 
       const data = await res.json();
-      const text = (data.content || []).map(b => b.text || '').join('');
+
+      if (data.error || !data.content) {
+        const errMsg = data.error ? `${data.error.type}: ${data.error.message}` : `Unexpected response: ${JSON.stringify(data).slice(0,200)}`;
+        ra.innerHTML = `<div class="error-box"><i class="ti ti-alert-circle"></i> NEXUS API error: ${esc(errMsg)}</div>`;
+        btn.disabled = false;
+        return;
+      }
+
+      const text = data.content.map(b => b.text || '').join('');
       const domains = detectDomains(q + ' ' + text);
       const related = generateRelated(q);
 
