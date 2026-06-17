@@ -1,1004 +1,580 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ORBITIQ NEXUS — Global Aerospace Knowledge Archive</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ORBITIQ NEXUS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --b0:#020818;--b1:#070f1e;--b2:#0d1a2e;--b3:#0a1628;
+  --blue:#3b82f6;--cyan:#06b6d4;--purple:#8b5cf6;--green:#10b981;--amber:#f59e0b;--red:#ef4444;
+  --t1:#f1f5f9;--t2:#94a3b8;--t3:#475569;
+  --border:rgba(59,130,246,0.18);--border2:rgba(59,130,246,0.4);
+  --glow:0 0 24px rgba(59,130,246,0.25);
+}
+html,body{height:100%;background:var(--b0);color:var(--t1);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
 
-    :root {
-      --blue: #3b82f6;
-      --blue-bright: #60a5fa;
-      --cyan: #06b6d4;
-      --purple: #8b5cf6;
-      --green: #10b981;
-      --orange: #f59e0b;
-      --red: #ef4444;
-      --bg0: #020818;
-      --bg1: #070f1e;
-      --bg2: #0d1a2e;
-      --bg3: #122040;
-      --text1: #e2e8f0;
-      --text2: #94a3b8;
-      --text3: #475569;
-      --border: rgba(59,130,246,0.2);
-      --border-bright: rgba(59,130,246,0.5);
-      --glow: 0 0 20px rgba(59,130,246,0.3);
-      --glow-strong: 0 0 40px rgba(59,130,246,0.5);
-    }
+/* STARS */
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twink var(--d,3s) ease-in-out infinite alternate}
+@keyframes twink{0%{opacity:.1}100%{opacity:.8}}
+.nebula{position:absolute;border-radius:50%;filter:blur(80px);opacity:.06}
 
-    html, body {
-      height: 100%; width: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg0);
-      color: var(--text1);
-      overflow: hidden;
-    }
+/* LAYOUT */
+#app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column}
 
-    /* STARFIELD */
-    #stars {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.05) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.05) 0%, transparent 60%),
-        var(--bg0);
-    }
-    #stars::before, #stars::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 85% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 15% 70%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 65% 75%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 5% 90%, rgba(100,180,255,0.8) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 50% 5%, rgba(100,180,255,0.7) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 95% 40%, rgba(180,100,255,0.8) 0%, transparent 100%);
-    }
-    #stars::after {
-      background-image:
-        radial-gradient(1px 1px at 8% 30%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 22% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 45% 65%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 60% 25%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 75% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 92% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 38% 88%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 18% 42%, rgba(255,255,255,0.3) 0%, transparent 100%);
-      animation: twinkle 4s ease-in-out infinite alternate;
-    }
-    @keyframes twinkle { 0%{opacity:0.5} 100%{opacity:1} }
+/* HEADER */
+#hdr{
+  height:54px;padding:0 20px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(2,8,24,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-ring{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;box-shadow:0 0 12px rgba(59,130,246,.5);
+  animation:ring-pulse 3s ease-in-out infinite;
+}
+@keyframes ring-pulse{0%,100%{box-shadow:0 0 12px rgba(59,130,246,.4)}50%{box-shadow:0 0 24px rgba(139,92,246,.7)}}
+.logo-name{font-size:16px;font-weight:800;letter-spacing:.1em;background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sub{font-size:9px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-top:1px}
+.hdr-right{display:flex;align-items:center;gap:12px}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--green);padding:3px 10px;border-radius:99px;border:1px solid rgba(16,185,129,.3);background:rgba(16,185,129,.08)}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:twink .8s ease-in-out infinite alternate}
+.back-link{font-size:11px;color:var(--t3);text-decoration:none;display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);transition:.15s}
+.back-link:hover{color:var(--cyan);border-color:var(--border2)}
 
-    /* LAYOUT */
-    #app {
-      position: relative; z-index: 1;
-      height: 100vh; display: flex; flex-direction: column;
-    }
+/* BODY */
+#body{display:flex;flex:1;min-height:0}
 
-    /* HEADER */
-    #header {
-      flex-shrink: 0;
-      padding: 0 24px;
-      height: 60px;
-      display: flex; align-items: center; justify-content: space-between;
-      background: rgba(2,8,24,0.8);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      position: relative;
-    }
-    #header::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--blue), var(--cyan), var(--purple), transparent);
-      animation: scanline 3s linear infinite;
-    }
-    @keyframes scanline { 0%{opacity:0.4} 50%{opacity:1} 100%{opacity:0.4} }
+/* SIDEBAR */
+#sb{
+  width:190px;flex-shrink:0;
+  background:rgba(7,15,30,.7);backdrop-filter:blur(10px);
+  border-right:1px solid var(--border);
+  overflow-y:auto;padding:10px 0;
+  scrollbar-width:thin;scrollbar-color:rgba(59,130,246,.2) transparent;
+}
+.sb-group{margin-bottom:4px}
+.sb-lbl{font-size:9px;font-weight:700;letter-spacing:.18em;color:var(--t3);text-transform:uppercase;padding:8px 12px 3px}
+.sb-btn{
+  width:100%;padding:7px 12px;
+  font-size:12px;color:var(--t2);
+  background:none;border:none;border-left:2px solid transparent;
+  cursor:pointer;display:flex;align-items:center;gap:7px;
+  text-align:left;transition:.15s;letter-spacing:.02em;
+}
+.sb-btn:hover{background:rgba(59,130,246,.07);color:var(--t1);border-left-color:rgba(59,130,246,.3)}
+.sb-btn.on{background:rgba(59,130,246,.12);color:var(--cyan);border-left-color:var(--blue);font-weight:600}
 
-    .logo { display: flex; align-items: center; gap: 12px; }
-    .logo-hex {
-      width: 38px; height: 38px; position: relative;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .logo-hex svg { position: absolute; }
-    .logo-hex .hex-spin { animation: spin-slow 8s linear infinite; }
-    @keyframes spin-slow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-    .logo-hex .hex-inner { font-size: 16px; position: relative; z-index: 1; }
-    .logo-name {
-      font-size: 18px; font-weight: 700; letter-spacing: 0.1em;
-      background: linear-gradient(135deg, #fff 0%, var(--blue-bright) 50%, var(--cyan) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .logo-sub { font-size: 9px; color: var(--text3); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 2px; }
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
 
-    .header-right { display: flex; align-items: center; gap: 16px; }
-    .nexus-badge {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-      color: var(--green); text-transform: uppercase;
-      padding: 4px 10px; border-radius: 99px;
-      border: 1px solid rgba(16,185,129,0.3);
-      background: rgba(16,185,129,0.08);
-      animation: pulse-badge 2s ease-in-out infinite;
-    }
-    @keyframes pulse-badge { 0%,100%{box-shadow:0 0 8px rgba(16,185,129,0.2)} 50%{box-shadow:0 0 16px rgba(16,185,129,0.5)} }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-dot 1.5s ease-in-out infinite; }
-    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)} }
+/* QUERY BAR */
+#qbar{
+  flex-shrink:0;padding:12px 16px 8px;
+  background:rgba(7,15,30,.8);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+#qrow{display:flex;gap:8px;margin-bottom:8px}
+#qi{
+  flex:1;padding:9px 14px;
+  background:rgba(13,26,46,.8);border:1px solid var(--border);border-radius:8px;
+  font-size:13px;color:var(--t1);font-family:inherit;outline:none;transition:.2s;
+}
+#qi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+#qi::placeholder{color:var(--t3)}
+#qbtn{
+  padding:9px 16px;
+  background:linear-gradient(135deg,#1d4ed8,#4f46e5);
+  color:#fff;border:none;border-radius:8px;
+  font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  box-shadow:0 4px 14px rgba(59,130,246,.35);transition:.2s;
+}
+#qbtn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.5)}
+#qbtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-    .back-link {
-      font-size: 11px; color: var(--text2); text-decoration: none;
-      display: flex; align-items: center; gap: 5px; letter-spacing: 0.05em;
-      padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border);
-      transition: all 0.2s;
-    }
-    .back-link:hover { color: var(--blue-bright); border-color: var(--border-bright); }
+/* MODE CHIPS */
+#modes{display:flex;gap:5px;flex-wrap:wrap}
+.mc{
+  padding:4px 10px;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  border-radius:99px;border:1px solid var(--border);color:var(--t3);
+  background:rgba(13,26,46,.5);cursor:pointer;transition:.15s;
+}
+.mc:hover{border-color:var(--border2);color:var(--t2)}
+.mc.on{background:rgba(59,130,246,.15);border-color:var(--blue);color:var(--cyan);box-shadow:0 0 8px rgba(59,130,246,.2)}
 
-    /* NAV */
-    #nav {
-      flex-shrink: 0;
-      display: flex; gap: 0; padding: 0 16px;
-      background: rgba(7,15,30,0.9);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto; scrollbar-width: none;
-    }
-    #nav::-webkit-scrollbar { display: none; }
-    .nav-tab {
-      padding: 12px 16px;
-      font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
-      color: var(--text3); cursor: pointer;
-      border: none; background: none;
-      border-bottom: 2px solid transparent;
-      white-space: nowrap;
-      display: flex; align-items: center; gap: 7px;
-      transition: all 0.2s; text-transform: uppercase;
-    }
-    .nav-tab:hover { color: var(--text2); }
-    .nav-tab.active { color: var(--blue-bright); border-bottom-color: var(--blue); }
-    .nav-tab.active i { filter: drop-shadow(0 0 4px var(--blue)); }
+/* CONTENT */
+#content{flex:1;overflow-y:auto;padding:16px;scrollbar-width:thin;scrollbar-color:rgba(59,130,246,.2) transparent}
 
-    /* BODY */
-    #body { display: flex; flex: 1; min-height: 0; }
+/* WELCOME */
+.w-title{font-size:26px;font-weight:800;letter-spacing:.03em;background:linear-gradient(135deg,#fff 0%,var(--cyan) 60%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.w-sub{font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:22px;max-width:620px}
+.w-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.stat{background:rgba(13,26,46,.6);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;position:relative;overflow:hidden;transition:.2s}
+.stat:hover{border-color:var(--border2);box-shadow:var(--glow)}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.stat-n{font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-l{font-size:10px;color:var(--t3);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
+.w-sh{font-size:9px;font-weight:700;letter-spacing:.2em;color:var(--t3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.w-sh::before{content:'';width:3px;height:10px;background:linear-gradient(180deg,var(--blue),var(--cyan));border-radius:2px}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:20px}
+.qcard{background:rgba(13,26,46,.6);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
+.qcard::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,.06),transparent);opacity:0;transition:.18s}
+.qcard:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--glow)}
+.qcard:hover::after{opacity:1}
+.qi2{font-size:20px;margin-bottom:8px}
+.ql{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:3px}
+.qd{font-size:11px;color:var(--t3);line-height:1.4}
+.sqrow{display:flex;flex-wrap:wrap;gap:6px}
+.sqbtn{font-size:11px;padding:5px 11px;border-radius:6px;border:1px solid var(--border);color:var(--t2);background:rgba(13,26,46,.5);cursor:pointer;transition:.15s}
+.sqbtn:hover{border-color:var(--blue);color:var(--cyan);background:rgba(59,130,246,.08);box-shadow:0 0 8px rgba(59,130,246,.15)}
 
-    /* SIDEBAR */
-    #sidebar {
-      width: 200px; flex-shrink: 0;
-      background: rgba(7,15,30,0.6);
-      backdrop-filter: blur(10px);
-      border-right: 1px solid var(--border);
-      overflow-y: auto; padding: 12px 0;
-      scrollbar-width: thin;
-      scrollbar-color: var(--bg3) transparent;
-    }
-    .sb-label {
-      font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
-      color: var(--text3); text-transform: uppercase;
-      padding: 8px 14px 4px;
-    }
-    .sb-item {
-      padding: 8px 14px;
-      font-size: 12px; color: var(--text2);
-      cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-      border-left: 2px solid transparent;
-      transition: all 0.15s; letter-spacing: 0.02em;
-    }
-    .sb-item:hover { background: rgba(59,130,246,0.08); color: var(--text1); border-left-color: rgba(59,130,246,0.3); }
-    .sb-item.active { background: rgba(59,130,246,0.12); color: var(--blue-bright); border-left-color: var(--blue); font-weight: 500; }
-    .sb-item.active i { filter: drop-shadow(0 0 4px var(--blue)); }
-    .sb-item i { font-size: 14px; }
+/* THINKING */
+.think{
+  background:rgba(13,26,46,.7);border:1px solid var(--border);border-radius:12px;padding:22px;
+  animation:fadein .3s ease-out;
+}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.think-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.think-orb{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  animation:orb-spin 2s linear infinite;
+  box-shadow:0 0 20px rgba(59,130,246,.5);
+}
+@keyframes orb-spin{0%{box-shadow:0 0 12px rgba(59,130,246,.4)}50%{box-shadow:0 0 24px rgba(139,92,246,.7)}100%{box-shadow:0 0 12px rgba(59,130,246,.4)}}
+.think-ttl{font-size:14px;font-weight:700;color:var(--t1);letter-spacing:.04em}
+.think-sub{font-size:11px;color:var(--t3);margin-top:3px}
+.scanbar{height:2px;border-radius:2px;background:var(--b3);overflow:hidden;margin-bottom:14px}
+.scanfill{height:100%;width:35%;background:linear-gradient(90deg,transparent,var(--blue),var(--cyan),transparent);animation:scan 1.2s ease-in-out infinite}
+@keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(380%)} }
+.dlines{display:flex;flex-direction:column;gap:5px}
+.dl{display:flex;align-items:center;gap:10px;font-size:11px;font-family:'SF Mono','Fira Code',monospace;opacity:0;animation:dlin .4s ease-out forwards}
+.dl:nth-child(1){animation-delay:.05s}.dl:nth-child(2){animation-delay:.2s}.dl:nth-child(3){animation-delay:.35s}.dl:nth-child(4){animation-delay:.5s}
+@keyframes dlin{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+.dlk{color:var(--cyan);min-width:150px}.dlv{color:var(--green);animation:flick 4s step-end infinite}
+@keyframes flick{0%,94%,100%{opacity:1}95%,99%{opacity:.5}}
 
-    /* MAIN */
-    #main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+/* RECORD */
+.rec-hdr{
+  padding:18px 20px;margin-bottom:12px;
+  background:linear-gradient(135deg,rgba(13,26,46,.95),rgba(18,32,64,.8));
+  border:1px solid var(--border2);border-radius:12px;
+  position:relative;overflow:hidden;animation:fadein .3s ease-out;
+}
+.rec-hdr::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--purple))}
+.rec-cls{font-size:9px;font-weight:700;letter-spacing:.2em;color:var(--cyan);text-transform:uppercase;margin-bottom:6px}
+.rec-hl{font-size:19px;font-weight:800;background:linear-gradient(135deg,#fff 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.3}
 
-    /* QUERY BAR */
-    #query-zone {
-      flex-shrink: 0;
-      padding: 14px 16px 10px;
-      background: rgba(7,15,30,0.7);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-    #query-row { display: flex; gap: 10px; margin-bottom: 10px; }
-    #query-input {
-      flex: 1; padding: 10px 16px;
-      background: rgba(13,26,46,0.8);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 14px; color: var(--text1);
-      font-family: inherit; outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      letter-spacing: 0.02em;
-    }
-    #query-input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.15), var(--glow);
-    }
-    #query-input::placeholder { color: var(--text3); }
-    #query-btn {
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #1d4ed8, #4f46e5);
-      color: #fff; border: none; border-radius: 8px;
-      font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
-      cursor: pointer; display: flex; align-items: center; gap: 7px;
-      white-space: nowrap; text-transform: uppercase;
-      transition: all 0.2s;
-      box-shadow: 0 4px 15px rgba(59,130,246,0.3);
-    }
-    #query-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,0.5); }
-    #query-btn:active { transform: translateY(0); }
-    #query-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+/* SECTIONS */
+.sec{
+  margin-bottom:10px;border-radius:10px;border:1px solid var(--border);
+  background:rgba(13,26,46,.55);overflow:hidden;
+  transition:border-color .2s,box-shadow .2s;
+}
+.sec:hover{border-color:var(--border2);box-shadow:var(--glow)}
+.sec-hdr{
+  display:flex;align-items:center;gap:9px;padding:9px 14px;
+  background:rgba(5,12,28,.6);border-bottom:1px solid var(--border);
+}
+.sec-ico{font-size:15px;line-height:1}
+.sec-ttl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.sec-body{padding:12px 14px}
 
-    #mode-row { display: flex; gap: 6px; flex-wrap: wrap; }
-    .mode-chip {
-      padding: 5px 12px; font-size: 10px; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      border-radius: 99px; cursor: pointer;
-      border: 1px solid var(--border);
-      color: var(--text3); background: rgba(13,26,46,0.5);
-      transition: all 0.2s;
-    }
-    .mode-chip:hover { border-color: var(--border-bright); color: var(--text2); }
-    .mode-chip.active {
-      background: rgba(59,130,246,0.15);
-      border-color: var(--blue);
-      color: var(--blue-bright);
-      box-shadow: 0 0 10px rgba(59,130,246,0.2);
-    }
+/* SUMMARY TYPE */
+.sec.t-summary{border-color:rgba(59,130,246,.3)}
+.sec.t-summary .sec-hdr{background:rgba(59,130,246,.08)}
+.sec.t-summary .sec-body{font-size:14px;color:var(--t1);line-height:1.8}
 
-    /* CONTENT */
-    #content { flex: 1; overflow-y: auto; padding: 20px; scrollbar-width: thin; scrollbar-color: var(--bg3) transparent; }
+/* STORY TYPE */
+.sec.t-story .sec-body{font-size:13px;color:var(--t2);line-height:1.85}
 
-    /* WELCOME */
-    #welcome { padding: 8px 0; }
-    .welcome-title {
-      font-size: 28px; font-weight: 800; letter-spacing: 0.04em;
-      background: linear-gradient(135deg, #fff 0%, var(--blue-bright) 40%, var(--cyan) 70%, var(--purple) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 8px;
-    }
-    .welcome-sub { font-size: 14px; color: var(--text2); line-height: 1.7; margin-bottom: 28px; max-width: 700px; }
+/* HIGHLIGHT TYPE */
+.sec.t-highlight{border-color:rgba(245,158,11,.4)}
+.sec.t-highlight .sec-hdr{background:rgba(245,158,11,.07)}
+.sec.t-highlight .sec-ttl{color:var(--amber)}
+.sec.t-highlight .sec-body{font-size:13px;color:#fde68a;font-style:italic;line-height:1.8}
 
-    .metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px; }
-    .metric {
-      background: rgba(13,26,46,0.6);
-      border: 1px solid var(--border);
-      border-radius: 10px; padding: 16px;
-      text-align: center; position: relative; overflow: hidden;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .metric:hover { border-color: var(--border-bright); box-shadow: var(--glow); }
-    .metric::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--blue), var(--cyan));
-    }
-    .metric-num {
-      font-size: 28px; font-weight: 800; letter-spacing: -0.02em;
-      background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .metric-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; letter-spacing: 0.08em; text-transform: uppercase; }
+/* SPECS TYPE */
+.spec-list{display:flex;flex-direction:column;gap:5px}
+.srow{
+  display:flex;align-items:baseline;gap:8px;
+  padding:6px 10px;border-radius:6px;
+  background:rgba(5,12,28,.5);border-left:2px solid rgba(59,130,246,.35);
+}
+.sk{font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:.04em;min-width:110px;flex-shrink:0}
+.sv{font-size:12px;color:var(--t2);line-height:1.5}
+.sdot{color:var(--blue);font-size:11px;flex-shrink:0}
 
-    .section-hdr {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
-      color: var(--text3); text-transform: uppercase;
-      margin-bottom: 12px; padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .section-hdr::before { content:''; width:3px; height:12px; background:linear-gradient(180deg,var(--blue),var(--cyan)); border-radius:2px; }
+/* TIMELINE TYPE */
+.tl{display:flex;flex-direction:column}
+.tli{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(59,130,246,.08);position:relative;padding-left:20px}
+.tli:last-child{border-bottom:none}
+.tldot{position:absolute;left:0;top:13px;width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 6px var(--blue);flex-shrink:0}
+.tli::before{content:'';position:absolute;left:3.5px;top:21px;bottom:-7px;width:1px;background:rgba(59,130,246,.25)}
+.tli:last-child::before{display:none}
+.tl-lbl{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.03em}
+.tl-rest{font-size:12px;color:var(--t2)}
 
-    .quick-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 10px; margin-bottom: 28px; }
-    .quick-card {
-      background: rgba(13,26,46,0.6);
-      border: 1px solid var(--border);
-      border-radius: 10px; padding: 14px;
-      cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
-    }
-    .quick-card::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(59,130,246,0.05), transparent);
-      opacity: 0; transition: opacity 0.2s;
-    }
-    .quick-card:hover { border-color: var(--border-bright); transform: translateY(-2px); box-shadow: var(--glow); }
-    .quick-card:hover::before { opacity: 1; }
-    .qc-icon { font-size: 22px; color: var(--blue-bright); margin-bottom: 10px; display: block; }
-    .qc-label { font-size: 13px; font-weight: 600; color: var(--text1); margin-bottom: 4px; }
-    .qc-desc { font-size: 11px; color: var(--text3); line-height: 1.5; }
+/* VERDICT */
+.verdict{
+  margin-top:12px;padding:14px 16px;
+  background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(59,130,246,.08));
+  border:1px solid rgba(139,92,246,.35);border-radius:10px;
+  display:flex;align-items:flex-start;gap:10px;animation:fadein .5s ease-out;
+}
+.v-lbl{font-size:9px;font-weight:700;letter-spacing:.15em;color:var(--purple);text-transform:uppercase;white-space:nowrap;margin-top:2px}
+.v-txt{font-size:13px;color:var(--t1);font-weight:500;line-height:1.65;font-style:italic}
 
-    .suggest-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .suggest-btn {
-      font-size: 11px; padding: 6px 12px; border-radius: 6px;
-      border: 1px solid var(--border); color: var(--text2);
-      background: rgba(13,26,46,0.5); cursor: pointer;
-      transition: all 0.2s; letter-spacing: 0.03em;
-    }
-    .suggest-btn:hover { border-color: var(--blue); color: var(--blue-bright); background: rgba(59,130,246,0.08); box-shadow: 0 0 10px rgba(59,130,246,0.15); }
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.tag{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid rgba(59,130,246,.35);color:var(--cyan);background:rgba(59,130,246,.08);cursor:pointer;transition:.15s}
+.tag:hover{background:rgba(59,130,246,.2);box-shadow:0 0 8px rgba(59,130,246,.25)}
 
-    /* RESPONSE CARD */
-    .response-card {
-      background: rgba(13,26,46,0.7);
-      border: 1px solid var(--border);
-      border-radius: 12px; padding: 20px 22px;
-      margin-bottom: 16px;
-      backdrop-filter: blur(10px);
-      animation: card-in 0.4s ease-out;
-      position: relative; overflow: hidden;
-    }
-    @keyframes card-in { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-    .response-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--purple));
-      animation: shimmer 2s linear infinite;
-      background-size: 200% 100%;
-    }
-    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+/* RELATED */
+.related{margin-top:12px}
+.rel-lbl{font-size:9px;font-weight:700;letter-spacing:.18em;color:var(--t3);text-transform:uppercase;margin-bottom:8px}
+.relrow{display:flex;flex-wrap:wrap;gap:5px}
 
-    .response-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 12px; }
-    .response-topic {
-      font-size: 16px; font-weight: 700; color: var(--text1);
-      display: flex; align-items: center; gap: 10px; letter-spacing: 0.02em;
-    }
-    .response-topic i { color: var(--blue-bright); font-size: 18px; filter: drop-shadow(0 0 6px var(--blue)); }
-    .response-mode {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--cyan); padding: 3px 10px; border-radius: 99px;
-      border: 1px solid rgba(6,182,212,0.3); background: rgba(6,182,212,0.08);
-      white-space: nowrap; flex-shrink: 0;
-    }
+/* ERROR */
+.err{background:rgba(30,8,8,.8);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:14px 16px;font-size:13px;color:#fca5a5;display:flex;align-items:center;gap:10px}
 
-    .response-body {
-      font-size: 14px; color: var(--text2); line-height: 1.85;
-      white-space: pre-wrap; letter-spacing: 0.01em;
-    }
-    .response-body strong { color: var(--text1); font-weight: 600; }
-
-    /* STREAMING CURSOR */
-    .cursor { display: inline-block; width: 2px; height: 14px; background: var(--blue-bright); margin-left: 2px; animation: blink 0.8s step-end infinite; vertical-align: middle; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-    .tag {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 99px;
-      border: 1px solid rgba(59,130,246,0.4);
-      color: var(--blue-bright); background: rgba(59,130,246,0.1);
-      cursor: pointer; transition: all 0.2s;
-    }
-    .tag:hover { background: rgba(59,130,246,0.2); box-shadow: 0 0 8px rgba(59,130,246,0.3); }
-
-    .divider { height: 1px; background: var(--border); margin: 16px 0; }
-
-    .related-label { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
-
-    /* THINKING */
-    .thinking-card {
-      background: rgba(13,26,46,0.7);
-      border: 1px solid var(--border);
-      border-radius: 12px; padding: 24px 22px;
-      display: flex; flex-direction: column; gap: 16px;
-      animation: card-in 0.3s ease-out;
-    }
-    .thinking-header { display: flex; align-items: center; gap: 12px; }
-    .thinking-icon {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue), var(--purple));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; animation: rotate-glow 2s linear infinite;
-    }
-    @keyframes rotate-glow {
-      0%{box-shadow:0 0 10px rgba(59,130,246,0.5)} 
-      50%{box-shadow:0 0 20px rgba(139,92,246,0.7)} 
-      100%{box-shadow:0 0 10px rgba(59,130,246,0.5)}
-    }
-    .thinking-text { font-size: 14px; font-weight: 600; color: var(--text1); letter-spacing: 0.04em; }
-    .thinking-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
-
-    .scan-bar {
-      height: 2px; border-radius: 2px;
-      background: var(--bg3); overflow: hidden; position: relative;
-    }
-    .scan-bar-fill {
-      height: 100%; width: 40%;
-      background: linear-gradient(90deg, transparent, var(--blue), var(--cyan), transparent);
-      animation: scan 1.5s ease-in-out infinite;
-    }
-    @keyframes scan { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
-
-    .data-lines { display: flex; flex-direction: column; gap: 6px; }
-    .data-line {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace;
-      color: var(--text3); opacity: 0;
-      animation: line-in 0.4s ease-out forwards;
-    }
-    .data-line:nth-child(1) { animation-delay: 0.1s; }
-    .data-line:nth-child(2) { animation-delay: 0.3s; }
-    .data-line:nth-child(3) { animation-delay: 0.5s; }
-    .data-line:nth-child(4) { animation-delay: 0.7s; }
-    @keyframes line-in { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
-    .dl-label { color: var(--blue-bright); min-width: 140px; }
-    .dl-value { color: var(--green); animation: flicker 3s step-end infinite; }
-    @keyframes flicker { 0%,95%,100%{opacity:1} 96%,99%{opacity:0.7} }
-
-    /* ERROR */
-    .error-card {
-      background: rgba(30,10,10,0.8);
-      border: 1px solid rgba(239,68,68,0.3);
-      border-radius: 10px; padding: 16px 18px;
-      font-size: 13px; color: #fca5a5;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .error-card i { font-size: 18px; color: var(--red); flex-shrink: 0; }
-
-    /* HISTORY */
-    .history-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
-      cursor: pointer; transition: all 0.15s;
-    }
-    .history-item:hover .hi-q { color: var(--blue-bright); }
-    .hi-icon { color: var(--blue); font-size: 14px; margin-top: 2px; flex-shrink: 0; }
-    .hi-q { font-size: 13px; color: var(--text1); line-height: 1.4; }
-    .hi-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
-
-    @media (max-width: 640px) { #sidebar { display: none; } }
-
-    /* RECORD LAYOUT */
-    .rec-header {
-      margin-bottom: 20px;
-      padding: 20px 22px;
-      background: linear-gradient(135deg, rgba(13,26,46,0.9), rgba(18,32,64,0.8));
-      border: 1px solid var(--border-bright);
-      border-radius: 12px;
-      position: relative; overflow: hidden;
-      animation: card-in 0.3s ease-out;
-    }
-    .rec-header::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:3px;
-      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--purple));
-    }
-    .rec-classification {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
-      color: var(--cyan); text-transform: uppercase; margin-bottom: 8px;
-    }
-    .rec-headline {
-      font-size: 20px; font-weight: 800; letter-spacing: 0.02em;
-      background: linear-gradient(135deg, #fff 0%, var(--blue-bright) 60%, var(--cyan) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      line-height: 1.3;
-    }
-
-    /* SECTION CARDS */
-    .sec-card {
-      margin-bottom: 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: rgba(13,26,46,0.6);
-      backdrop-filter: blur(8px);
-      overflow: hidden;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .sec-card:hover { border-color: var(--border-bright); box-shadow: var(--glow); }
-    .sec-header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 16px;
-      background: rgba(5,15,35,0.5);
-      border-bottom: 1px solid var(--border);
-    }
-    .sec-icon { font-size: 16px; line-height: 1; }
-    .sec-title {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--blue-bright);
-    }
-    .sec-body { padding: 14px 16px; }
-    .sec-content {
-      font-size: 14px; color: var(--text2); line-height: 1.8;
-    }
-
-    /* TYPE VARIANTS */
-    .sec-summary { border-color: rgba(59,130,246,0.3); }
-    .sec-summary .sec-header { background: rgba(59,130,246,0.08); }
-    .sec-summary .sec-content { color: var(--text1); font-size: 14px; font-weight: 400; }
-
-    .sec-highlight { border-color: rgba(245,158,11,0.4); }
-    .sec-highlight .sec-header { background: rgba(245,158,11,0.08); }
-    .sec-highlight .sec-title { color: var(--orange); }
-    .sec-highlight .sec-content { color: #fde68a; font-style: italic; font-size: 14px; line-height: 1.8; }
-
-    .sec-story .sec-content { color: var(--text2); }
-
-    /* SPECS */
-    .spec-list { display: flex; flex-direction: column; gap: 6px; }
-    .spec-row {
-      display: flex; align-items: baseline; gap: 10px;
-      padding: 6px 10px; border-radius: 6px;
-      background: rgba(5,15,35,0.4);
-      border-left: 2px solid rgba(59,130,246,0.4);
-    }
-    .spec-key {
-      font-size: 11px; font-weight: 700; color: var(--cyan);
-      letter-spacing: 0.04em; min-width: 120px; flex-shrink: 0;
-    }
-    .spec-val { font-size: 13px; color: var(--text2); line-height: 1.5; }
-    .spec-dot { color: var(--blue); font-size: 12px; flex-shrink: 0; }
-
-    /* TIMELINE */
-    .tl-list { display: flex; flex-direction: column; gap: 0; }
-    .tl-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 8px 0; border-bottom: 1px solid rgba(59,130,246,0.1);
-      position: relative; padding-left: 24px;
-    }
-    .tl-item:last-child { border-bottom: none; }
-    .tl-dot {
-      position: absolute; left: 0; top: 14px;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--blue); flex-shrink: 0;
-      box-shadow: 0 0 6px var(--blue);
-    }
-    .tl-item::before {
-      content:''; position:absolute; left:3.5px; top:22px; bottom:-8px;
-      width:1px; background: rgba(59,130,246,0.3);
-    }
-    .tl-item:last-child::before { display:none; }
-    .tl-body { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px; }
-    .tl-label { font-size:12px; font-weight:700; color:var(--blue-bright); letter-spacing:0.04em; }
-    .tl-rest { font-size:13px; color:var(--text2); }
-
-    /* VERDICT */
-    .verdict-card {
-      margin-top: 16px;
-      padding: 16px 18px;
-      background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1));
-      border: 1px solid rgba(139,92,246,0.4);
-      border-radius: 10px;
-      display: flex; align-items: flex-start; gap: 12px;
-      animation: card-in 0.4s ease-out;
-    }
-    .verdict-label {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.15em;
-      color: var(--purple); text-transform: uppercase; white-space: nowrap; margin-top: 2px;
-    }
-    .verdict-text { font-size: 14px; color: var(--text1); font-weight: 500; line-height: 1.6; font-style: italic; }
-
-    .related-block { margin-top: 16px; }
-    .related-label { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; }
-  </style>
+/* HISTORY */
+.hi-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
+.hi-item:hover .hi-q{color:var(--cyan)}
+.hi-ico{color:var(--blue);font-size:13px;margin-top:2px;flex-shrink:0}
+.hi-q{font-size:13px;color:var(--t1);line-height:1.4}
+.hi-m{font-size:10px;color:var(--t3);margin-top:2px}
+</style>
 </head>
 <body>
-<div id="stars"></div>
+<div id="bg"></div>
 <div id="app">
 
-  <div id="header">
-    <div class="logo">
-      <div class="logo-hex">
-        <svg class="hex-spin" width="38" height="38" viewBox="0 0 38 38">
-          <polygon points="19,2 35,11 35,27 19,36 3,27 3,11" fill="none" stroke="url(#hg)" stroke-width="1.5"/>
-          <defs><linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
-        </svg>
-        <span class="hex-inner">⬡</span>
-      </div>
-      <div>
-        <div class="logo-name">ORBITIQ NEXUS</div>
-        <div class="logo-sub">Global Aerospace Knowledge Archive</div>
-      </div>
-    </div>
-    <div class="header-right">
-      <a href="../index.html" class="back-link"><i class="ti ti-arrow-left"></i> Explorer</a>
-      <div class="nexus-badge"><div class="badge-dot"></div> NEXUS ONLINE</div>
+<div id="hdr">
+  <div class="logo">
+    <div class="logo-ring">⬡</div>
+    <div>
+      <div class="logo-name">ORBITIQ NEXUS</div>
+      <div class="logo-sub">Global Aerospace Knowledge Archive</div>
     </div>
   </div>
-
-  <div id="nav">
-    <button class="nav-tab active" onclick="switchTab('archive','tab-archive')" id="tab-archive"><i class="ti ti-database"></i> Archive</button>
-    <button class="nav-tab" onclick="switchTab('mission','tab-mission')" id="tab-mission"><i class="ti ti-rocket"></i> Mission Intel</button>
-    <button class="nav-tab" onclick="switchTab('failure','tab-failure')" id="tab-failure"><i class="ti ti-alert-triangle"></i> Failure Analysis</button>
-    <button class="nav-tab" onclick="switchTab('future','tab-future')" id="tab-future"><i class="ti ti-telescope"></i> Future Forecast</button>
-    <button class="nav-tab" onclick="switchTab('history','tab-history')" id="tab-history"><i class="ti ti-clock-history"></i> Query Log</button>
-  </div>
-
-  <div id="body">
-    <div id="sidebar">
-      <div class="sb-label">Domains</div>
-      <div class="sb-item active" onclick="sbQuery(this,'aircraft overview — most significant military and civilian aircraft in history from WW1 to stealth jets')"><i class="ti ti-plane"></i> Aircraft</div>
-      <div class="sb-item" onclick="sbQuery(this,'spacecraft overview — most significant crewed and uncrewed spacecraft in history from Vostok to Starship')"><i class="ti ti-rocket"></i> Spacecraft</div>
-      <div class="sb-item" onclick="sbQuery(this,'satellite programs — Sputnik to modern megaconstellations, technology and strategic impact')"><i class="ti ti-satellite"></i> Satellites</div>
-      <div class="sb-item" onclick="sbQuery(this,'launch vehicles — from V2 to Saturn V to Falcon 9 Heavy and SLS, evolution and capabilities')"><i class="ti ti-arrow-bar-up"></i> Launch Vehicles</div>
-      <div class="sb-item" onclick="sbQuery(this,'UAV and drone programs globally — Predator, Reaper, autonomous combat systems and future directions')"><i class="ti ti-drone"></i> UAV / Drones</div>
-      <div class="sb-item" onclick="sbQuery(this,'missile programs globally — ICBM, cruise missiles, hypersonic glide vehicles — technical history')"><i class="ti ti-bolt"></i> Missiles</div>
-      <div class="sb-label">Organizations</div>
-      <div class="sb-item" onclick="sbQuery(this,'NASA complete archive — Mercury Gemini Apollo Shuttle Artemis — full history achievements and future')"><i class="ti ti-star"></i> NASA</div>
-      <div class="sb-item" onclick="sbQuery(this,'ISRO complete archive — India space program from Aryabhata to Chandrayaan Mangalyaan Gaganyaan')"><i class="ti ti-star"></i> ISRO</div>
-      <div class="sb-item" onclick="sbQuery(this,'SpaceX complete archive — Falcon 1 to Starship, reusability revolution, Elon Musk Mars vision')"><i class="ti ti-star"></i> SpaceX</div>
-      <div class="sb-item" onclick="sbQuery(this,'Roscosmos and Soviet space program — Sputnik Vostok Soyuz MIR ISS to current status')"><i class="ti ti-star"></i> Roscosmos</div>
-      <div class="sb-item" onclick="sbQuery(this,'CNSA archive — Long March, Tiangong, Chang\'e lunar program, Tianwen Mars, 2030 ambitions')"><i class="ti ti-star"></i> CNSA</div>
-      <div class="sb-item" onclick="sbQuery(this,'ESA archive — Ariane rockets, Rosetta, Mars Express, Galileo, James Webb partnership')"><i class="ti ti-star"></i> ESA</div>
-      <div class="sb-label">Eras</div>
-      <div class="sb-item" onclick="sbQuery(this,'Aerospace pioneers era 1903–1957 — Wright Brothers through jet age, breaking sound barrier, key milestones')"><i class="ti ti-history"></i> Pioneers 1903–57</div>
-      <div class="sb-item" onclick="sbQuery(this,'Space Race 1957–1972 — Sputnik to Apollo, Cold War competition, heroes of the space age')"><i class="ti ti-history"></i> Space Race 57–72</div>
-      <div class="sb-item" onclick="sbQuery(this,'Space Shuttle era 1981–2011 — 135 missions, Challenger Columbia disasters, ISS construction legacy')"><i class="ti ti-history"></i> Shuttle Era</div>
-      <div class="sb-item" onclick="sbQuery(this,'New Space revolution 2010s — commercial launchers, reusability, cubesats, private astronauts')"><i class="ti ti-history"></i> New Space 2010s+</div>
-      <div class="sb-item" onclick="sbQuery(this,'Future aerospace 2030–2050 — lunar bases, Mars missions, nuclear propulsion, space tourism')"><i class="ti ti-telescope"></i> Future 2030–2050</div>
-    </div>
-
-    <div id="main">
-      <div id="query-zone">
-        <div id="query-row">
-          <input id="query-input" type="text" placeholder="⚡ Query the NEXUS — mission, vehicle, disaster, pioneer, technology, future…" />
-          <button id="query-btn" onclick="runQuery()"><i class="ti ti-search"></i> Launch Query</button>
-        </div>
-        <div id="mode-row">
-          <div class="mode-chip active" onclick="setMode(this,'archive')">📁 Archive Record</div>
-          <div class="mode-chip" onclick="setMode(this,'technical')">⚙️ Technical Deep Dive</div>
-          <div class="mode-chip" onclick="setMode(this,'failure')">⚠️ Failure Analysis</div>
-          <div class="mode-chip" onclick="setMode(this,'timeline')">📅 Timeline Evolution</div>
-          <div class="mode-chip" onclick="setMode(this,'forecast')">🔭 Future Forecast</div>
-          <div class="mode-chip" onclick="setMode(this,'crew')">👨‍🚀 Crew Profile</div>
-          <div class="mode-chip" onclick="setMode(this,'compare')">🌍 Nation Compare</div>
-        </div>
-      </div>
-
-      <div id="content">
-        <div id="welcome">
-          <div class="welcome-title">NEXUS ARCHIVE ONLINE</div>
-          <div class="welcome-sub">The world's most comprehensive AI-powered aerospace knowledge engine. Query any mission, vehicle, disaster, pioneer, or technology across 120+ years of human flight — from Kitty Hawk to the Moon, Mars, and beyond.</div>
-
-          <div class="metrics">
-            <div class="metric"><div class="metric-num">120+</div><div class="metric-lbl">Years Documented</div></div>
-            <div class="metric"><div class="metric-num">24</div><div class="metric-lbl">Nations Indexed</div></div>
-            <div class="metric"><div class="metric-num">∞</div><div class="metric-lbl">AI Intelligence Depth</div></div>
-          </div>
-
-          <div class="section-hdr">Quick Access — High Priority Records</div>
-          <div class="quick-grid">
-            <div class="quick-card" onclick="preset('Apollo 13 — complete failure analysis, oxygen tank explosion, NASA crisis response, heroes of mission control')">
-              <i class="qc-icon ti ti-alert-triangle"></i>
-              <div class="qc-label">Apollo 13</div>
-              <div class="qc-desc">Failure analysis, mission control heroics</div>
-            </div>
-            <div class="quick-card" onclick="preset('F-22 Raptor — complete technical archive, stealth systems, supercruise, AESA radar, air superiority dominance')">
-              <i class="qc-icon ti ti-plane"></i>
-              <div class="qc-label">F-22 Raptor</div>
-              <div class="qc-desc">5th gen stealth, systems deep dive</div>
-            </div>
-            <div class="quick-card" onclick="preset('ISRO Chandrayaan program — Chandrayaan 1, 2, 3 missions complete archive, Vikram lander, Pragyan rover, south pole landing')">
-              <i class="qc-icon ti ti-moon"></i>
-              <div class="qc-label">Chandrayaan</div>
-              <div class="qc-desc">India conquers the lunar south pole</div>
-            </div>
-            <div class="quick-card" onclick="preset('SpaceX Falcon 9 — reusability revolution, booster landing evolution, reliability record, commercial dominance')">
-              <i class="qc-icon ti ti-rocket"></i>
-              <div class="qc-label">Falcon 9</div>
-              <div class="qc-desc">The reusability revolution timeline</div>
-            </div>
-            <div class="quick-card" onclick="preset('Yuri Gagarin — complete crew profile, Vostok 1 mission, 108 minutes that changed history, legacy')">
-              <i class="qc-icon ti ti-user-star"></i>
-              <div class="qc-label">Yuri Gagarin</div>
-              <div class="qc-desc">First human in space — full profile</div>
-            </div>
-            <div class="quick-card" onclick="preset('Hypersonic weapons global race — US, China, Russia programs, Mach 20+ vehicles, 2040 strategic forecast')">
-              <i class="qc-icon ti ti-bolt"></i>
-              <div class="qc-label">Hypersonics</div>
-              <div class="qc-desc">Global arms race, 2040 outlook</div>
-            </div>
-          </div>
-
-          <div class="section-hdr">Suggested Intelligence Queries</div>
-          <div class="suggest-row">
-            <button class="suggest-btn" onclick="preset('Challenger disaster — O-ring failure, Rogers Commission, NASA culture, full investigation')">🔥 Challenger disaster</button>
-            <button class="suggest-btn" onclick="preset('SR-71 Blackbird — Mach 3.2, J58 engine, reconnaissance missions, technical masterpiece')">✈️ SR-71 Blackbird</button>
-            <button class="suggest-btn" onclick="preset('Artemis program — return to Moon, Gateway station, SLS Orion, 2030 lunar base vision')">🌕 Artemis program</button>
-            <button class="suggest-btn" onclick="preset('China aerospace rise — Long March 5, Tiangong station, Chang\'e 6 sample return, 2035 ambitions')">🇨🇳 CNSA rise</button>
-            <button class="suggest-btn" onclick="preset('Kalpana Chawla — biography, STS-87, STS-107 Columbia disaster, India\'s space hero')">🌟 Kalpana Chawla</button>
-            <button class="suggest-btn" onclick="preset('Wright Flyer to Boeing 787 — complete aviation evolution, 120 years of flight technology')">📅 Aviation timeline</button>
-            <button class="suggest-btn" onclick="preset('MQ-9 Reaper — predator lineage, combat record, autonomous AI future, drone warfare doctrine')">🤖 MQ-9 Reaper</button>
-            <button class="suggest-btn" onclick="preset('Mars colonization 2040–2060 — SpaceX Starship, NASA architecture, life support, first settlers')">🔴 Mars forecast</button>
-          </div>
-        </div>
-        <div id="result-area" style="display:none;"></div>
-      </div>
-    </div>
+  <div class="hdr-right">
+    <a href="../index.html" class="back-link"><i class="ti ti-arrow-left"></i> Explorer</a>
+    <div class="live-badge"><div class="live-dot"></div> NEXUS ONLINE</div>
   </div>
 </div>
 
+<div id="body">
+<div id="sb">
+  <div class="sb-group">
+    <div class="sb-lbl">Domains</div>
+    <button class="sb-btn on" onclick="sbq(this,'Aircraft — most significant military and civilian aircraft, from biplanes to stealth jets. History, specs, combat records.')">✈️ Aircraft</button>
+    <button class="sb-btn" onclick="sbq(this,'Spacecraft — crewed and uncrewed spacecraft history from Vostok to Orion and Starship. Mission records, specs, milestones.')">🚀 Spacecraft</button>
+    <button class="sb-btn" onclick="sbq(this,'Satellites — from Sputnik to modern megaconstellations. Technology, strategic impact, key programs by nation.')">🛰️ Satellites</button>
+    <button class="sb-btn" onclick="sbq(this,'Launch vehicles — V2 to Saturn V to Falcon 9. The complete evolution of rockets, propulsion breakthroughs, reliability records.')">🔥 Launchers</button>
+    <button class="sb-btn" onclick="sbq(this,'UAV and drone programs — Predator, Reaper, autonomous combat systems. Military doctrine and AI future.')">🤖 UAV / Drones</button>
+    <button class="sb-btn" onclick="sbq(this,'Missile programs — ICBM, cruise missiles, hypersonic glide vehicles. Global arms race, technical history.')">⚡ Missiles</button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-lbl">Agencies</div>
+    <button class="sb-btn" onclick="sbq(this,'NASA — complete history from Mercury to Artemis. Greatest achievements, disasters, current programs, future missions.')">🌟 NASA</button>
+    <button class="sb-btn" onclick="sbq(this,'ISRO — India space program from Aryabhata to Chandrayaan-3 south pole landing. Mangalyaan, Gaganyaan, future vision.')">🇮🇳 ISRO</button>
+    <button class="sb-btn" onclick="sbq(this,'SpaceX — Falcon 1 to Starship. The reusability revolution, Elon Musk Mars vision, commercial dominance.')">⚡ SpaceX</button>
+    <button class="sb-btn" onclick="sbq(this,'Roscosmos and Soviet space program — Sputnik through Mir through ISS. Cold War glory and modern decline.')">🇷🇺 Roscosmos</button>
+    <button class="sb-btn" onclick="sbq(this,'CNSA — Long March, Tiangong, Chang e lunar missions, Tianwen Mars. China space ambitions 2035.')">🇨🇳 CNSA</button>
+    <button class="sb-btn" onclick="sbq(this,'ESA — Ariane rockets, Rosetta comet mission, Mars Express, Galileo GPS, JWST partnership.')">🌍 ESA</button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-lbl">Eras</div>
+    <button class="sb-btn" onclick="sbq(this,'Aerospace pioneers 1903 to 1957 — Wright Brothers, Lindbergh, Chuck Yeager, breaking sound barrier, jet age dawn.')">🌅 Pioneers 1903–57</button>
+    <button class="sb-btn" onclick="sbq(this,'Space Race 1957 to 1972 — Sputnik to Apollo. Cold War in orbit, heroes and tragedies, Moon landing triumph.')">🏁 Space Race 57–72</button>
+    <button class="sb-btn" onclick="sbq(this,'Shuttle era 1981 to 2011 — 135 missions, Challenger and Columbia disasters, ISS assembly, legacy of the orbiter.')">🚀 Shuttle Era</button>
+    <button class="sb-btn" onclick="sbq(this,'New Space 2010s to now — reusable rockets, commercial crew, cubesats, private astronauts, space tourism dawn.')">💫 New Space</button>
+    <button class="sb-btn" onclick="sbq(this,'Future aerospace 2030 to 2050 — lunar bases, Mars colonies, nuclear propulsion, eVTOL cities, space mining.')">🔭 Future 2030–50</button>
+  </div>
+</div>
+
+<div id="main">
+  <div id="qbar">
+    <div id="qrow">
+      <input id="qi" type="text" placeholder="⚡ Query the NEXUS — any mission, vehicle, disaster, pioneer, technology, or future…"/>
+      <button id="qbtn" onclick="run()"><i class="ti ti-search"></i> LAUNCH</button>
+    </div>
+    <div id="modes">
+      <div class="mc on" data-m="archive">📁 Archive</div>
+      <div class="mc" data-m="technical">⚙️ Technical</div>
+      <div class="mc" data-m="failure">⚠️ Failure</div>
+      <div class="mc" data-m="timeline">📅 Timeline</div>
+      <div class="mc" data-m="forecast">🔭 Forecast</div>
+      <div class="mc" data-m="crew">👨‍🚀 Crew</div>
+      <div class="mc" data-m="compare">⚖️ Compare</div>
+    </div>
+  </div>
+  <div id="content">
+    <div id="welcome">
+      <div class="w-title">NEXUS ARCHIVE ONLINE</div>
+      <div class="w-sub">AI-powered aerospace knowledge engine. Query any mission, vehicle, disaster, pioneer, or technology — 120+ years of flight history, instantly.</div>
+      <div class="w-stats">
+        <div class="stat"><div class="stat-n">120+</div><div class="stat-l">Years Documented</div></div>
+        <div class="stat"><div class="stat-n">24</div><div class="stat-l">Nations Indexed</div></div>
+        <div class="stat"><div class="stat-n">∞</div><div class="stat-l">AI Depth</div></div>
+      </div>
+      <div class="w-sh">High Priority Records</div>
+      <div class="qgrid">
+        <div class="qcard" onclick="go('Apollo 13 failure analysis — oxygen tank explosion, mission control crisis, how NASA saved three lives 200,000 miles from Earth')"><div class="qi2">💥</div><div class="ql">Apollo 13</div><div class="qd">Failure analysis & heroics</div></div>
+        <div class="qcard" onclick="go('F-22 Raptor — stealth, supercruise, AESA radar, air superiority dominance. Complete technical archive.')"><div class="qi2">✈️</div><div class="ql">F-22 Raptor</div><div class="qd">5th gen stealth deep dive</div></div>
+        <div class="qcard" onclick="go('ISRO Chandrayaan program — all three missions, Vikram lander, Pragyan rover, south pole landing triumph')"><div class="qi2">🌕</div><div class="ql">Chandrayaan</div><div class="qd">India conquers the Moon</div></div>
+        <div class="qcard" onclick="go('SpaceX Falcon 9 — reusability revolution, booster landing, reliability record, how it disrupted aerospace forever')"><div class="qi2">🚀</div><div class="ql">Falcon 9</div><div class="qd">The reusability revolution</div></div>
+        <div class="qcard" onclick="go('Yuri Gagarin — biography, Vostok 1, 108 minutes that changed history, legacy of the first human in space')"><div class="qi2">🌟</div><div class="ql">Yuri Gagarin</div><div class="qd">First human in space</div></div>
+        <div class="qcard" onclick="go('Hypersonic weapons race — US HGV, China DF-17, Russia Avangard. Mach 20 glide vehicles and 2040 strategic forecast')"><div class="qi2">⚡</div><div class="ql">Hypersonics</div><div class="qd">Global arms race 2040</div></div>
+      </div>
+      <div class="w-sh">Suggested Queries</div>
+      <div class="sqrow">
+        <button class="sqbtn" onclick="go('Challenger disaster — O-ring failure, Rogers Commission, NASA culture breakdown, complete investigation')">🔥 Challenger</button>
+        <button class="sqbtn" onclick="go('SR-71 Blackbird — Mach 3.2, J58 engine, CIA reconnaissance missions, the fastest plane ever built')">✈️ SR-71 Blackbird</button>
+        <button class="sqbtn" onclick="go('Artemis program — SLS, Orion, lunar Gateway, 2030 Moon base, NASA return to the Moon')">🌕 Artemis</button>
+        <button class="sqbtn" onclick="go('Kalpana Chawla — biography, STS-87, STS-107 Columbia disaster, India space hero')">🌟 Kalpana Chawla</button>
+        <button class="sqbtn" onclick="go('Wright Flyer to Boeing 787 — complete 120 year aviation evolution timeline')">📅 Aviation timeline</button>
+        <button class="sqbtn" onclick="go('MQ-9 Reaper — Predator lineage, combat record, targeted strike history, autonomous future')">🤖 MQ-9 Reaper</button>
+        <button class="sqbtn" onclick="go('Mars colonization 2040 to 2060 — SpaceX Starship architecture, life support, first human settlers')">🔴 Mars 2050</button>
+        <button class="sqbtn" onclick="go('Columbia STS-107 disaster — foam strike, wing failure, crew final moments, investigation findings')">💥 Columbia</button>
+      </div>
+    </div>
+    <div id="ra" style="display:none"></div>
+  </div>
+</div>
+</div>
+</div>
+
 <script>
-  const PROXY = 'https://orbitiq-nexus-proxy.mahin-aeroai.workers.dev';
-  let currentMode = 'archive';
-  let queryHistory = [];
+// Stars
+(()=>{
+  const bg=document.getElementById('bg');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=Math.random()<.15?2:1;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s`;
+    bg.appendChild(s);
+  }
+  ['rgba(59,130,246,1)','rgba(139,92,246,1)','rgba(6,182,212,1)'].forEach((c,i)=>{
+    const n=document.createElement('div');
+    n.className='nebula';
+    n.style.cssText=`width:${300+i*100}px;height:${200+i*80}px;background:${c};left:${[10,60,30][i]}%;top:${[20,60,80][i]}%`;
+    bg.appendChild(n);
+  });
+})();
 
-  const modePrompts = {
-    archive: `You are ORBITIQ NEXUS. Respond ONLY with valid JSON, no markdown, no preamble. Structure:
-{"headline":"Dramatic headline","classification":"ARCHIVE RECORD","sections":[{"icon":"🛸","title":"EXECUTIVE SUMMARY","type":"summary","content":"2-3 punchy sentences. Hook the reader. Drop a stunning fact."},{"icon":"📜","title":"HISTORICAL ORIGINS","type":"story","content":"The origin story with drama, names, dates, stakes. Vivid."},{"icon":"⚙️","title":"TECHNICAL ARCHITECTURE","type":"specs","bullets":["Specification: value — significance","Specification: value — significance","Specification: value — significance","Specification: value — significance","Specification: value — significance"]},{"icon":"🎯","title":"MISSION AND OPERATIONS","type":"story","content":"What it did. Real missions. Real numbers. Real stakes."},{"icon":"🔥","title":"DEFINING MOMENT","type":"highlight","content":"The single most dramatic moment. Tell it like a story."},{"icon":"🌍","title":"STRATEGIC SIGNIFICANCE","type":"story","content":"Why it mattered. Geopolitical, technological, human impact."},{"icon":"🔭","title":"LEGACY AND FUTURE","type":"story","content":"What it changed forever. What comes next."}],"verdict":"One powerful sentence that captures everything."}`,
-    technical: `You are ORBITIQ NEXUS Systems Engineering Module. Respond ONLY with valid JSON:
-{"headline":"Technical designation and key capability","classification":"TECHNICAL DEEP DIVE","sections":[{"icon":"🚀","title":"PROPULSION SYSTEMS","type":"specs","bullets":["Engine: model — thrust and ISP figures","Fuel: type — specific impulse","Key innovation: what makes it remarkable","Performance: figures"]},{"icon":"✈️","title":"AERODYNAMICS AND STRUCTURES","type":"specs","bullets":["Dimensions: wingspan, length, height","Materials: composites and alloys used","Structural innovation: detail","Lift and drag: figures"]},{"icon":"🧭","title":"GUIDANCE NAVIGATION AND CONTROL","type":"story","content":"How it finds its way. Sensors, algorithms, precision figures."},{"icon":"⚡","title":"POWER AND AVIONICS","type":"specs","bullets":["Power source: output figures","Computing: processor details","Sensor suite: radar and IR specs","Communications: frequency and range"]},{"icon":"🔬","title":"ENGINEERING BREAKTHROUGHS","type":"story","content":"What problem this solved that had never been solved before."},{"icon":"📈","title":"PERFORMANCE ENVELOPE","type":"specs","bullets":["Max speed: figure and significance","Altitude ceiling: figure","Range or endurance: figure","Payload capacity: figure"]}],"verdict":"Engineering verdict: what this machine represents in human ingenuity."}`,
-    failure: `You are ORBITIQ NEXUS Failure Analysis Module. Respond ONLY with valid JSON:
-{"headline":"The disaster that changed everything","classification":"FAILURE ANALYSIS","sections":[{"icon":"💥","title":"INCIDENT CLASSIFICATION","type":"summary","content":"What happened. When. Where. The immediate human and material cost."},{"icon":"⏱️","title":"SEQUENCE OF EVENTS","type":"timeline_list","bullets":["T+00:00 — Initial condition","T+XX:XX — First anomaly detected","T+XX:XX — Point of no return","T+XX:XX — Final moments","T+XX:XX — Aftermath begins"]},{"icon":"🔍","title":"ROOT CAUSE ANALYSIS","type":"story","content":"The real reason. Not proximate cause — the fundamental failure that made this inevitable."},{"icon":"🧠","title":"HUMAN AND ORGANIZATIONAL FACTORS","type":"specs","bullets":["Factor: description — how it contributed","Factor: description — how it contributed","Factor: description — how it contributed"]},{"icon":"🛠️","title":"CORRECTIVE ACTIONS","type":"specs","bullets":["Change: description and implementation","Change: description and implementation","Change: description and implementation"]},{"icon":"📚","title":"LESSONS LEARNED","type":"story","content":"What aerospace learned that it could not have learned any other way."},{"icon":"🏛️","title":"LEGACY","type":"highlight","content":"How this failure made aerospace safer. The gift tragedy left behind."}],"verdict":"The uncomfortable truth this disaster forced the world to confront."}`,
-    timeline: `You are ORBITIQ NEXUS Timeline Engine. Respond ONLY with valid JSON:
-{"headline":"The complete evolutionary saga","classification":"TIMELINE EVOLUTION","sections":[{"icon":"🌱","title":"ORIGINS","type":"story","content":"Where it began. The problem it was solving. The pioneers who started it."},{"icon":"📅","title":"EVOLUTIONARY LINEAGE","type":"timeline_list","bullets":["[YEAR] Name — breakthrough achieved, limitation overcome","[YEAR] Name — next generation, what changed and why","[YEAR] Name — major leap, specifications improvement","[YEAR] Name — operational deployment, real-world impact","[YEAR] Name — current generation, capability peak","[YEAR] Future — next generation in development"]},{"icon":"🔄","title":"DEAD ENDS AND PIVOTS","type":"story","content":"The paths not taken. Programs cancelled. Technologies abandoned. Why."},{"icon":"⚡","title":"THE DEFINING LEAP","type":"highlight","content":"The single moment that changed everything. The breakthrough that made all others obsolete."},{"icon":"📊","title":"CAPABILITY EVOLUTION","type":"specs","bullets":["Metric: original value to current value — factor improvement","Metric: original value to current value — factor improvement","Metric: original value to current value — factor improvement"]},{"icon":"🔭","title":"NEXT GENERATION","type":"story","content":"What comes next. Programs in development. The 2030 to 2040 horizon."}],"verdict":"What this evolutionary arc reveals about human ambition."}`,
-    forecast: `You are ORBITIQ NEXUS Future Intelligence Engine. Respond ONLY with valid JSON:
-{"headline":"What the next 25 years hold","classification":"FUTURE INTELLIGENCE FORECAST","sections":[{"icon":"📡","title":"CURRENT STATE 2025","type":"summary","content":"Where we stand right now. What is operational, funded, in development."},{"icon":"⚡","title":"NEAR TERM 2026 TO 2030","type":"specs","bullets":["Milestone: description — confidence level","Milestone: description — confidence level","Program: status and expected outcome"]},{"icon":"🚀","title":"MID TERM 2031 TO 2040","type":"story","content":"The decade of transformation. What becomes routine that is currently revolutionary."},{"icon":"🌌","title":"FAR TERM 2041 TO 2050","type":"specs","bullets":["Capability: description — enabling technology required","Capability: description — enabling technology required","Wildcard: if X then Y scenario"]},{"icon":"⚠️","title":"THREATS AND OBSTACLES","type":"specs","bullets":["Risk: description — mitigation pathway","Risk: description — mitigation pathway"]},{"icon":"🌍","title":"GEOPOLITICAL IMPLICATIONS","type":"story","content":"Who wins. Who loses. The strategic balance this reshapes."},{"icon":"💡","title":"WILDCARD SCENARIOS","type":"highlight","content":"The black swan. The unexpected breakthrough or failure that could change everything overnight."}],"verdict":"The single most important thing to understand about where this is heading."}`,
-    crew: `You are ORBITIQ NEXUS Personnel Archive. Respond ONLY with valid JSON:
-{"headline":"The human who changed history","classification":"PERSONNEL ARCHIVE","sections":[{"icon":"👤","title":"BIOGRAPHICAL PROFILE","type":"summary","content":"Who they are in one vivid paragraph. Born where, when, into what world. The origin of the dream."},{"icon":"🎓","title":"EDUCATION AND FORMATION","type":"specs","bullets":["Education: degree, institution, year","Military: branch, rank, years of service","Training: key programs completed","Specialization: what made them exceptional"]},{"icon":"🚀","title":"MISSION RECORD","type":"timeline_list","bullets":["Mission — date — role — key achievement","Mission — date — role — key achievement","Mission — date — duration — significance"]},{"icon":"🔥","title":"DEFINING MOMENT","type":"highlight","content":"The moment that defined them. The split-second decision or achievement no one else could match."},{"icon":"🏆","title":"CONTRIBUTIONS AND AWARDS","type":"specs","bullets":["Award: name — for what achievement","Achievement: description — significance","Record: what record they hold"]},{"icon":"🌟","title":"LEGACY","type":"story","content":"What they changed. Who they inspired. How aerospace is different because they existed."}],"verdict":"Why history will remember this person."}`,
-    compare: `You are ORBITIQ NEXUS Comparative Intelligence Module. Respond ONLY with valid JSON:
-{"headline":"The ultimate face-off","classification":"COMPARATIVE INTELLIGENCE","sections":[{"icon":"📊","title":"HEAD TO HEAD OVERVIEW","type":"summary","content":"The fundamental difference between these two. What each represents in aerospace history."},{"icon":"🏛️","title":"HISTORICAL TRAJECTORY","type":"timeline_list","bullets":["Entity A: founding moment and key early achievement","Entity A: major milestone and turning point","Entity B: founding moment and key early achievement","Entity B: major milestone and turning point"]},{"icon":"⚙️","title":"TECHNICAL CAPABILITIES","type":"specs","bullets":["Dimension: A value vs B value — winner and why","Dimension: A value vs B value — winner and why","Dimension: A value vs B value — winner and why","Dimension: A value vs B value — winner and why"]},{"icon":"💰","title":"RESOURCES AND SCALE","type":"specs","bullets":["Budget: A figure vs B figure","Workforce: A vs B","Output cadence: A vs B","Success rate: A vs B"]},{"icon":"🏆","title":"LANDMARK ACHIEVEMENTS","type":"story","content":"Each side greatest moment. The achievement that defines their legacy."},{"icon":"🔭","title":"2030 COMPETITIVE OUTLOOK","type":"highlight","content":"Who has the edge going forward. What the next decade will determine about the winner."}],"verdict":"The definitive verdict — who leads, who follows, and why it matters."}`
+const PROXY='https://orbitiq-nexus-proxy.mahin-aeroai.workers.dev';
+let mode='archive', hist=[];
+
+// Mode chips
+document.querySelectorAll('.mc').forEach(c=>{
+  c.onclick=()=>{
+    document.querySelectorAll('.mc').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    mode=c.dataset.m;
   };
+});
 
+// Sidebar
+function sbq(el,q){
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('qi').value=q;
+  run();
+}
 
-  const modeIcons = {
-    archive:'ti-database', technical:'ti-circuit-cell', failure:'ti-alert-triangle',
-    timeline:'ti-timeline', forecast:'ti-telescope', crew:'ti-user-star', compare:'ti-arrows-diff'
-  };
+function go(q){ document.getElementById('qi').value=q; run(); }
+function preset(q){ document.getElementById('qi').value=q; run(); }
 
-  const thinkingLines = [
-    ['QUERYING KNOWLEDGE BASE', 'AEROSPACE ARCHIVE v4.2'],
-    ['CROSS-REFERENCING SOURCES', '120+ years of records'],
-    ['COMPILING INTELLIGENCE', 'Synthesizing data streams'],
-    ['GENERATING ARCHIVE RECORD', 'Engaging AI core...']
-  ];
+document.getElementById('qi').addEventListener('keydown',e=>{ if(e.key==='Enter') run(); });
 
-  function setMode(el, mode) {
-    document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    currentMode = mode;
-  }
+// Nav tabs (repurpose as quick mode launchers via sidebar)
+const tabMap={
+  mission:'The most significant space missions in human history — Apollo, Voyager, Cassini, Hubble, JWST — what they did, what they found, why they mattered',
+  failure:'The most consequential aerospace disasters — Challenger, Columbia, Apollo 1 — complete forensic analysis, what went wrong, what it cost, what we learned',
+  future:'Future of aerospace 2025 to 2060 — Starship, Artemis Moon base, Mars colonies, hypersonics, nuclear propulsion — bold authoritative forecast'
+};
 
-  function switchTab(tab, id) {
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    const tabQ = {
-      archive: null,
-      mission: 'The most significant space missions in history — Apollo, Voyager, Hubble, Cassini, Curiosity, JWST — mission architecture, heroics, and lasting impact on human knowledge',
-      failure: 'The most consequential aerospace disasters in history — Challenger, Columbia, Apollo 1, KAL 007, Air France 447 — complete failure analysis and what they taught us',
-      future: 'The future of aerospace and space exploration 2025 to 2060 — Starship, Artemis lunar base, Mars colonies, hypersonics, nuclear propulsion, orbital tourism — bold authoritative forecast'
-    };
-    if (tab === 'archive') { showWelcome(); }
-    else if (tab === 'history') { showHistory(); }
-    else { runQueryWith(tabQ[tab]); }
-  }
+// SYSTEM PROMPTS — all return structured JSON
+const PROMPTS={
+  archive:`You are ORBITIQ NEXUS aerospace historian. Return ONLY a raw JSON object (no markdown, no backticks, no explanation). Structure:
+{"headline":"exciting headline max 12 words","classification":"ARCHIVE RECORD","sections":[{"icon":"🛸","title":"EXECUTIVE SUMMARY","type":"summary","content":"3 sentences. Most dramatic fact first. Make the reader lean in."},{"icon":"📜","title":"ORIGIN STORY","type":"story","content":"Where it came from. Who built it. The stakes. The drama. 3-4 sentences vivid prose."},{"icon":"⚙️","title":"TECHNICAL SPECS","type":"specs","bullets":["Thrust / Power: value and significance","Speed / Altitude: value","Dimensions: value","Key material or innovation: detail","Record or first: description"]},{"icon":"🎯","title":"IN ACTION","type":"story","content":"What it actually did. Real missions. Real moments. Numbers and names. 3 sentences."},{"icon":"🔥","title":"DEFINING MOMENT","type":"highlight","content":"One dramatic sentence. The moment that defined this subject forever. Maximum impact."},{"icon":"🌍","title":"WHY IT MATTERS","type":"story","content":"Geopolitical, technological, human impact. 2-3 sentences."},{"icon":"🔭","title":"WHAT COMES NEXT","type":"story","content":"Legacy and successor programs. 2 sentences."}],"verdict":"One sentence that nails everything. Bold. Memorable."}`,
 
-  function sbQuery(el, q) {
-    document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-    runQueryWith(q);
-  }
+  technical:`You are ORBITIQ NEXUS systems engineer. Return ONLY raw JSON:
+{"headline":"Technical designation and peak capability","classification":"TECHNICAL DEEP DIVE","sections":[{"icon":"🚀","title":"PROPULSION","type":"specs","bullets":["Engine: model — thrust figure — ISP","Fuel: type — burn time","Thrust-to-weight: ratio and significance","Innovation: what makes this propulsion remarkable"]},{"icon":"✈️","title":"AIRFRAME AND STRUCTURES","type":"specs","bullets":["Wingspan or diameter: figure","Length and empty weight: figures","Primary material: composites or alloys","Structural innovation: description","Load factor or g-limit: figure"]},{"icon":"🧭","title":"GUIDANCE AND CONTROL","type":"story","content":"How it navigates. Sensors used. Accuracy figures. What was groundbreaking about this system."},{"icon":"📡","title":"SENSORS AND AVIONICS","type":"specs","bullets":["Primary sensor: type and range","Radar: frequency and capability","Computing: processor and software detail","Comms: frequency band and range"]},{"icon":"🔬","title":"ENGINEERING BREAKTHROUGH","type":"highlight","content":"The one thing this machine did that had never been done before. One vivid sentence."},{"icon":"📈","title":"PERFORMANCE ENVELOPE","type":"specs","bullets":["Top speed: figure and Mach equivalent","Service ceiling: figure","Range or endurance: figure","Payload or weapons load: figure","Crew: number and roles"]}],"verdict":"Engineering verdict in one sentence."}`,
 
-  function preset(q) { document.getElementById('query-input').value = q; runQuery(); }
+  failure:`You are ORBITIQ NEXUS accident investigator. Return ONLY raw JSON:
+{"headline":"The disaster that rewrote the rules","classification":"FAILURE ANALYSIS","sections":[{"icon":"💥","title":"WHAT HAPPENED","type":"summary","content":"The incident in 3 sentences. When, where, what was lost. Maximum impact."},{"icon":"⏱️","title":"SEQUENCE OF EVENTS","type":"timeline_list","bullets":["T+00:00 — starting condition description","T+XX:XX — first anomaly detected","T+XX:XX — critical threshold crossed","T+XX:XX — point of no return","T+XX:XX — outcome"]},{"icon":"🔍","title":"ROOT CAUSE","type":"highlight","content":"The real reason this happened. Not the symptom — the cause. One unflinching paragraph."},{"icon":"🧠","title":"CONTRIBUTING FACTORS","type":"specs","bullets":["Factor: description and how it amplified the failure","Factor: description and how it amplified the failure","Factor: description and how it amplified the failure"]},{"icon":"🛠️","title":"WHAT CHANGED","type":"specs","bullets":["Change: what was redesigned and why","Change: what procedure was rewritten","Change: what culture shifted"]},{"icon":"🏛️","title":"THE GIFT OF TRAGEDY","type":"story","content":"What aerospace could only have learned this way. The knowledge bought at terrible cost. 3 sentences."}],"verdict":"The truth this disaster forced humanity to face."}`,
 
-  function showWelcome() {
-    document.getElementById('welcome').style.display = 'block';
-    document.getElementById('result-area').style.display = 'none';
-  }
+  timeline:`You are ORBITIQ NEXUS historian. Return ONLY raw JSON:
+{"headline":"The complete evolutionary saga","classification":"TIMELINE EVOLUTION","sections":[{"icon":"🌱","title":"THE BEGINNING","type":"story","content":"Origin. The problem being solved. The first attempt. Who and why."},{"icon":"📅","title":"EVOLUTION LINE","type":"timeline_list","bullets":["[YEAR] Name — what changed, what breakthrough, specs improvement","[YEAR] Name — next leap, what drove it, new capability","[YEAR] Name — operational, real impact, limitation discovered","[YEAR] Name — refinement, lessons applied, performance peak","[YEAR] Name — current generation, where things stand","[FUTURE] Name — what is coming, what it will do"]},{"icon":"🔄","title":"DEAD ENDS","type":"story","content":"The paths abandoned. The programs killed. What was tried and failed. 2 sentences."},{"icon":"⚡","title":"THE GREAT LEAP","type":"highlight","content":"The single generation that made everything before it obsolete overnight. Name it. Describe the shock."},{"icon":"📊","title":"HOW FAR WE CAME","type":"specs","bullets":["Key metric: from original value to current value — factor improvement","Key metric: from original value to current value — factor improvement","Key metric: from original value to current value — factor improvement"]}],"verdict":"What this journey reveals about human ambition."}`,
 
-  function showHistory() {
-    document.getElementById('welcome').style.display = 'none';
-    const ra = document.getElementById('result-area');
-    ra.style.display = 'block';
-    if (!queryHistory.length) {
-      ra.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:20px 0;text-align:center;">No queries yet. The archive awaits.</div>';
-      return;
-    }
-    ra.innerHTML = '<div class="section-hdr">Query Log — Session Archive</div>' +
-      queryHistory.map((h,i) =>
-        `<div class="history-item" onclick="rerunQuery(${i})">
-          <i class="ti ti-search hi-icon"></i>
-          <div><div class="hi-q">${esc(h.q)}</div><div class="hi-meta">${h.mode} MODE · ${h.time}</div></div>
-        </div>`).join('');
-  }
+  forecast:`You are ORBITIQ NEXUS intelligence analyst. Return ONLY raw JSON:
+{"headline":"What the next 25 years hold","classification":"FUTURE FORECAST","sections":[{"icon":"📡","title":"WHERE WE STAND NOW","type":"summary","content":"Current state 2025. What is operational, funded, in testing. 3 sentences."},{"icon":"⚡","title":"2026 TO 2030","type":"specs","bullets":["Milestone: description — probability assessment","Milestone: description — probability assessment","Program: expected outcome and timeline"]},{"icon":"🚀","title":"2031 TO 2040","type":"story","content":"The transformation decade. What becomes routine. What gets abandoned. What surprises us."},{"icon":"🌌","title":"2041 TO 2050","type":"specs","bullets":["Capability: description — enabling technology needed","Capability: description — enabling technology needed","Wildcard: if this happens then that changes"]},{"icon":"🌍","title":"WHO WINS","type":"highlight","content":"The geopolitical verdict. Which nation or company leads. What the balance of power looks like."},{"icon":"💡","title":"BLACK SWAN","type":"story","content":"The unexpected breakthrough or catastrophe that could flip everything. The scenario no one is planning for."}],"verdict":"The one thing you must understand about where this is heading."}`,
 
-  function rerunQuery(i) {
-    const h = queryHistory[i];
-    document.getElementById('query-input').value = h.q;
-    runQuery();
-  }
+  crew:`You are ORBITIQ NEXUS personnel archivist. Return ONLY raw JSON:
+{"headline":"The human who changed the sky","classification":"PERSONNEL FILE","sections":[{"icon":"👤","title":"WHO THEY WERE","type":"summary","content":"Born where, when, into what world. What made them extraordinary from day one. 3 vivid sentences."},{"icon":"🎓","title":"FORMATION","type":"specs","bullets":["Education: degree, institution, year graduated","Military: branch, years served, peak rank","Key training: programs completed","Specialty: what made them the best"]},{"icon":"🚀","title":"MISSION RECORD","type":"timeline_list","bullets":["Mission name — date — role aboard — what they did","Mission name — date — duration — key achievement","Mission name — date — significance to aerospace history"]},{"icon":"🔥","title":"THE MOMENT","type":"highlight","content":"The single act or decision that defines their legacy. Describe it like you were there."},{"icon":"🏆","title":"WHAT THEY EARNED","type":"specs","bullets":["Award: name — for what specific act","Record: what they were first or best at","Contribution: the thing aerospace uses today because of them"]},{"icon":"🌟","title":"LEGACY","type":"story","content":"What they changed. Who they inspired. How the sky is different because they flew."}],"verdict":"Why history will never forget this name."}`,
 
-  async function runQueryWith(q) {
-    document.getElementById('query-input').value = q;
-    await runQuery();
-  }
+  compare:`You are ORBITIQ NEXUS intelligence analyst. Return ONLY raw JSON:
+{"headline":"The definitive face-off","classification":"COMPARATIVE ANALYSIS","sections":[{"icon":"📊","title":"THE CONTEST","type":"summary","content":"What these two represent. The fundamental difference in philosophy, capability, or strategy. 2 sentences."},{"icon":"🏛️","title":"HOW THEY GOT HERE","type":"timeline_list","bullets":["Entity A: founding or origin — first major milestone","Entity A: breakthrough — turning point in capability","Entity B: founding or origin — first major milestone","Entity B: breakthrough — turning point in capability"]},{"icon":"⚙️","title":"HEAD TO HEAD","type":"specs","bullets":["Speed or output: A value vs B value — edge and why","Range or scale: A value vs B value — edge and why","Budget or resources: A figure vs B figure — implication","Success rate or reliability: A vs B — significance","Key advantage of A over B: description","Key advantage of B over A: description"]},{"icon":"🏆","title":"GREATEST ACHIEVEMENT","type":"story","content":"Each side biggest moment. The achievement that defines them. What it proved."},{"icon":"🔥","title":"THE VERDICT","type":"highlight","content":"Who leads. In what dimensions. By how much. And why that matters for the next 10 years."}],"verdict":"Final call — one sentence, no hedging."}`
+};
 
-  async function runQuery() {
-    const q = document.getElementById('query-input').value.trim();
-    if (!q) return;
+const THINK_LINES=[
+  ['SCANNING ARCHIVE','120 years indexed'],
+  ['CROSS-REFERENCING','Global intelligence feed'],
+  ['COMPILING RECORD','AI synthesis active'],
+  ['GENERATING OUTPUT','Deploying NEXUS core']
+];
 
-    document.getElementById('welcome').style.display = 'none';
-    const ra = document.getElementById('result-area');
-    ra.style.display = 'block';
+const MODE_ICONS={archive:'ti-database',technical:'ti-settings',failure:'ti-alert-triangle',timeline:'ti-timeline',forecast:'ti-telescope',crew:'ti-user-star',compare:'ti-arrows-diff'};
 
-    const icon = modeIcons[currentMode] || 'ti-database';
-    const modeLabel = currentMode.toUpperCase();
-    const btn = document.getElementById('query-btn');
-    btn.disabled = true;
+async function run(){
+  const q=document.getElementById('qi').value.trim();
+  if(!q) return;
 
-    // Animated thinking card
-    ra.innerHTML = `
-      <div class="thinking-card">
-        <div class="thinking-header">
-          <div class="thinking-icon">⬡</div>
-          <div>
-            <div class="thinking-text">NEXUS PROCESSING QUERY</div>
-            <div class="thinking-sub">Scanning ${(120 + Math.floor(Math.random()*30))}+ years of aerospace intelligence…</div>
-          </div>
-        </div>
-        <div class="scan-bar"><div class="scan-bar-fill"></div></div>
-        <div class="data-lines">
-          ${thinkingLines.map(([l,v]) => `<div class="data-line"><span class="dl-label">${l}</span><span class="dl-value">${v}</span></div>`).join('')}
-        </div>
-      </div>`;
+  document.getElementById('welcome').style.display='none';
+  const ra=document.getElementById('ra');
+  ra.style.display='block';
+  ra.innerHTML=`<div class="think">
+    <div class="think-hdr">
+      <div class="think-orb">⬡</div>
+      <div><div class="think-ttl">NEXUS PROCESSING</div><div class="think-sub">Scanning ${120+Math.floor(Math.random()*30)}+ years of aerospace records…</div></div>
+    </div>
+    <div class="scanbar"><div class="scanfill"></div></div>
+    <div class="dlines">
+      ${THINK_LINES.map(([k,v])=>`<div class="dl"><span class="dlk">${k}</span><span class="dlv">${v}</span></div>`).join('')}
+    </div>
+  </div>`;
 
-    try {
-      const res = await fetch(PROXY, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          system: modePrompts[currentMode],
-          messages: [{ role: 'user', content: `NEXUS QUERY: ${q}\n\nRespond ONLY with the JSON structure specified. No markdown fences. No preamble. Pure JSON.` }]
-        })
-      });
+  const btn=document.getElementById('qbtn');
+  btn.disabled=true;
 
-      const data = await res.json();
+  try{
+    const res=await fetch(PROXY,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        system:PROMPTS[mode],
+        messages:[{role:'user',content:`NEXUS QUERY: ${q}\n\nReturn ONLY the raw JSON object. No markdown fences. No text before or after. Pure JSON starting with { and ending with }.`}]
+      })
+    });
 
-      if (data.error || !data.content) {
-        const errMsg = data.error ? `${data.error.type}: ${data.error.message}` : `Bad response: ${JSON.stringify(data).slice(0,200)}`;
-        ra.innerHTML = `<div class="error-card"><i class="ti ti-alert-circle"></i> NEXUS ERROR: ${esc(errMsg)}</div>`;
-        btn.disabled = false;
-        return;
-      }
+    const data=await res.json();
 
-      let raw = data.content.map(b => b.text || '').join('').trim();
-      // Strip markdown fences if model wraps anyway
-      raw = raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
-
-      let parsed;
-      try {
-        parsed = JSON.parse(raw);
-      } catch(e) {
-        // Fallback: render as plain text nicely
-        ra.innerHTML = renderPlainFallback(q, raw, modeLabel, icon);
-        queryHistory.unshift({ q, mode: modeLabel, time: new Date().toLocaleTimeString() });
-        btn.disabled = false;
-        return;
-      }
-
-      queryHistory.unshift({ q, mode: modeLabel, time: new Date().toLocaleTimeString() });
-      if (queryHistory.length > 30) queryHistory.pop();
-
-      ra.innerHTML = renderRecord(parsed, q, modeLabel, icon, q);
-
-      // Animate sections in one by one
-      const cards = ra.querySelectorAll('.sec-card');
-      cards.forEach((card, i) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(16px)';
-        setTimeout(() => {
-          card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, 80 + i * 120);
-      });
-
-    } catch(e) {
-      ra.innerHTML = `<div class="error-card"><i class="ti ti-alert-circle"></i> CONNECTION ERROR: ${esc(e.message)}</div>`;
-    }
-    btn.disabled = false;
-  }
-
-  function renderRecord(data, q, modeLabel, icon) {
-    const domains = detectDomains(q + ' ' + JSON.stringify(data));
-    const related = generateRelated(q);
-
-    const sectionsHtml = (data.sections || []).map(s => renderSection(s)).join('');
-
-    return `
-      <div class="rec-header">
-        <div class="rec-classification">${esc(data.classification || modeLabel)}</div>
-        <div class="rec-headline">${esc(data.headline || q)}</div>
-      </div>
-      ${sectionsHtml}
-      ${data.verdict ? `<div class="verdict-card"><span class="verdict-label">⚡ VERDICT</span><span class="verdict-text">${esc(data.verdict)}</span></div>` : ''}
-      ${domains.length ? `<div class="tag-row" style="margin-top:16px">${domains.map(d=>`<span class="tag">${d}</span>`).join('')}</div>` : ''}
-      ${related.length ? `<div class="related-block"><div class="related-label">⚡ Related Intelligence Queries</div><div class="suggest-row">${related.map(r=>`<button class="suggest-btn" onclick="preset(${JSON.stringify(r)})">${esc(r)}</button>`).join('')}</div></div>` : ''}
-    `;
-  }
-
-  function renderSection(s) {
-    const typeStyles = {
-      summary: 'sec-summary',
-      story: 'sec-story',
-      specs: 'sec-specs',
-      highlight: 'sec-highlight',
-      timeline_list: 'sec-timeline'
-    };
-    const cls = typeStyles[s.type] || 'sec-story';
-
-    let bodyHtml = '';
-    if (s.content) {
-      bodyHtml = `<div class="sec-content">${esc(s.content)}</div>`;
-    }
-    if (s.bullets && s.bullets.length) {
-      if (s.type === 'timeline_list') {
-        bodyHtml += `<div class="tl-list">${s.bullets.map((b,i) => {
-          const parts = b.split(' — ');
-          const label = parts[0];
-          const rest = parts.slice(1).join(' — ');
-          return `<div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-body"><span class="tl-label">${esc(label)}</span>${rest ? ` <span class="tl-rest">— ${esc(rest)}</span>` : ''}</div>
-          </div>`;
-        }).join('')}</div>`;
-      } else {
-        bodyHtml += `<div class="spec-list">${s.bullets.map(b => {
-          const colon = b.indexOf(':');
-          const dash = b.indexOf(' — ');
-          if (colon > 0 && colon < 30) {
-            const key = b.slice(0, colon);
-            const val = b.slice(colon+1).trim();
-            return `<div class="spec-row"><span class="spec-key">${esc(key)}</span><span class="spec-val">${esc(val)}</span></div>`;
-          }
-          return `<div class="spec-row"><span class="spec-dot">▸</span><span class="spec-val">${esc(b)}</span></div>`;
-        }).join('')}</div>`;
-      }
+    if(data.error||!data.content){
+      const msg=data.error?`${data.error.type}: ${data.error.message}`:`Bad response: ${JSON.stringify(data).slice(0,200)}`;
+      ra.innerHTML=`<div class="err"><i class="ti ti-alert-circle"></i> NEXUS ERROR: ${x(msg)}</div>`;
+      btn.disabled=false; return;
     }
 
-    return `<div class="sec-card ${cls}">
-      <div class="sec-header">
-        <span class="sec-icon">${s.icon || '▸'}</span>
-        <span class="sec-title">${esc(s.title || '')}</span>
-      </div>
-      <div class="sec-body">${bodyHtml}</div>
-    </div>`;
+    let raw=data.content.map(b=>b.text||'').join('').trim();
+    raw=raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+
+    let parsed;
+    try{ parsed=JSON.parse(raw); }
+    catch(e){
+      // Fallback: plain display
+      ra.innerHTML=`<div class="sec t-story"><div class="sec-hdr"><span class="sec-ico">📋</span><span class="sec-ttl">${x(q.slice(0,50))}</span></div><div class="sec-body" style="font-size:13px;color:var(--t2);line-height:1.8;white-space:pre-wrap">${x(raw)}</div></div>`;
+      btn.disabled=false; return;
+    }
+
+    hist.unshift({q,mode,time:new Date().toLocaleTimeString()});
+    if(hist.length>30) hist.pop();
+
+    ra.innerHTML=buildRecord(parsed,q);
+
+    // Stagger section cards in
+    ra.querySelectorAll('.sec,.rec-hdr,.verdict,.tags,.related').forEach((el,i)=>{
+      el.style.cssText+='opacity:0;transform:translateY(12px)';
+      setTimeout(()=>{ el.style.transition='opacity .35s ease,transform .35s ease'; el.style.opacity='1'; el.style.transform='translateY(0)'; }, 60+i*100);
+    });
+
+  }catch(e){
+    ra.innerHTML=`<div class="err"><i class="ti ti-alert-circle"></i> CONNECTION ERROR: ${x(e.message)}</div>`;
   }
+  btn.disabled=false;
+}
 
-  function renderPlainFallback(q, text, modeLabel, icon) {
-    return `<div class="sec-card sec-story">
-      <div class="sec-header"><span class="sec-icon">📋</span><span class="sec-title">${esc(q.slice(0,60))}</span></div>
-      <div class="sec-body"><div class="sec-content" style="white-space:pre-wrap">${esc(text)}</div></div>
-    </div>`;
+function buildRecord(d,q){
+  const secs=(d.sections||[]).map(buildSec).join('');
+  const domains=getDomains(q+' '+JSON.stringify(d));
+  const rel=getRelated(q);
+  return `
+    <div class="rec-hdr">
+      <div class="rec-cls">${x(d.classification||mode.toUpperCase())}</div>
+      <div class="rec-hl">${x(d.headline||q)}</div>
+    </div>
+    ${secs}
+    ${d.verdict?`<div class="verdict"><span class="v-lbl">⚡ VERDICT</span><span class="v-txt">${x(d.verdict)}</span></div>`:''}
+    ${domains.length?`<div class="tags">${domains.map(t=>`<span class="tag">${t}</span>`).join('')}</div>`:''}
+    ${rel.length?`<div class="related"><div class="rel-lbl">⚡ Related Queries</div><div class="relrow">${rel.map(r=>`<button class="sqbtn" onclick="go(${JSON.stringify(r)})">${x(r.slice(0,40))}</button>`).join('')}</div></div>`:''}
+  `;
+}
+
+function buildSec(s){
+  let body='';
+  if(s.content) body+=`<div>${x(s.content)}</div>`;
+  if(s.bullets&&s.bullets.length){
+    if(s.type==='timeline_list'){
+      body+=`<div class="tl">${s.bullets.map(b=>{
+        const dash=b.indexOf(' — ');
+        const lbl=dash>0?b.slice(0,dash):b;
+        const rest=dash>0?b.slice(dash+3):'';
+        return `<div class="tli"><div class="tldot"></div><div><span class="tl-lbl">${x(lbl)}</span>${rest?` <span class="tl-rest">— ${x(rest)}</span>`:''}</div></div>`;
+      }).join('')}</div>`;
+    } else {
+      body+=`<div class="spec-list">${s.bullets.map(b=>{
+        const ci=b.indexOf(':');
+        if(ci>0&&ci<35){
+          return `<div class="srow"><span class="sk">${x(b.slice(0,ci))}</span><span class="sv">${x(b.slice(ci+1).trim())}</span></div>`;
+        }
+        return `<div class="srow"><span class="sdot">▸</span><span class="sv">${x(b)}</span></div>`;
+      }).join('')}</div>`;
+    }
   }
+  const t=s.type||'story';
+  return `<div class="sec t-${t}"><div class="sec-hdr"><span class="sec-ico">${s.icon||'▸'}</span><span class="sec-ttl">${x(s.title||'')}</span></div><div class="sec-body">${body}</div></div>`;
+}
 
-  function formatText(text) { return esc(text); }
+function getDomains(t){
+  const l=t.toLowerCase(),tags=[];
+  if(l.includes('nasa')||l.includes('apollo')) tags.push('NASA');
+  if(l.includes('spacex')||l.includes('falcon')) tags.push('SpaceX');
+  if(l.includes('isro')||l.includes('chandrayaan')) tags.push('ISRO');
+  if(l.includes('russia')||l.includes('soviet')) tags.push('Roscosmos');
+  if(l.includes('china')||l.includes('cnsa')) tags.push('CNSA');
+  if(l.includes('failure')||l.includes('disaster')) tags.push('Failure Analysis');
+  if(l.includes('hypersonic')||l.includes('missile')) tags.push('Defense');
+  if(l.includes('uav')||l.includes('drone')) tags.push('UAV');
+  if(l.includes('mars')||l.includes('lunar')) tags.push('Deep Space');
+  return tags.slice(0,5);
+}
 
-    function detectDomains(text) {
-    const t = text.toLowerCase(), tags = [];
-    if (t.includes('nasa') || t.includes('apollo')) tags.push('NASA');
-    if (t.includes('spacex') || t.includes('falcon') || t.includes('starship')) tags.push('SpaceX');
-    if (t.includes('isro') || t.includes('india') || t.includes('chandrayaan')) tags.push('ISRO');
-    if (t.includes('russia') || t.includes('soviet') || t.includes('soyuz')) tags.push('Roscosmos');
-    if (t.includes('china') || t.includes('cnsa') || t.includes('tiangong')) tags.push('CNSA');
-    if (t.includes('failure') || t.includes('disaster')) tags.push('Failure Analysis');
-    if (t.includes('hypersonic') || t.includes('stealth') || t.includes('missile')) tags.push('Defense');
-    if (t.includes('uav') || t.includes('drone')) tags.push('UAV');
-    if (t.includes('propulsion') || t.includes('engine')) tags.push('Propulsion');
-    if (t.includes('mars') || t.includes('lunar') || t.includes('moon')) tags.push('Deep Space');
-    return tags.slice(0,5);
-  }
+function getRelated(q){
+  const l=q.toLowerCase();
+  if(l.includes('apollo 13')) return ['Apollo 1 fire — failure analysis','Saturn V — greatest rocket ever built','Gene Kranz — flight director profile'];
+  if(l.includes('challenger')) return ['Columbia STS-107 disaster — complete analysis','Richard Feynman Rogers Commission O-ring demonstration','NASA safety culture — how disasters changed everything'];
+  if(l.includes('falcon')||l.includes('spacex')) return ['SpaceX Starship — Mars architecture 2030 forecast','Merlin engine — how SpaceX reinvented propulsion','Blue Origin vs SpaceX — new space race comparison'];
+  if(l.includes('isro')||l.includes('chandrayaan')) return ['Mangalyaan — India reaches Mars on first attempt','Gaganyaan — India first crewed spaceflight','ISRO vs CNSA — India vs China space race'];
+  if(l.includes('f-22')||l.includes('raptor')) return ['F-35 Lightning II technical deep dive','B-21 Raider stealth bomber next generation','NGAD sixth generation fighter 2035 forecast'];
+  if(l.includes('gagarin')) return ['Alan Shepard — America first astronaut','Valentina Tereshkova — first woman in space','Vostok program complete archive'];
+  return ['Apollo 11 — Moon landing archive','SR-71 Blackbird — fastest aircraft ever built','James Webb Space Telescope — eye of the cosmos'];
+}
 
-  function generateRelated(q) {
-    const l = q.toLowerCase();
-    if (l.includes('apollo 13')) return ['Apollo 1 fire — complete failure analysis','Saturn V — the greatest rocket ever built','Gene Kranz crew profile — flight director legend'];
-    if (l.includes('challenger')) return ['Columbia STS-107 — second shuttle tragedy','Richard Feynman O-ring demonstration — Rogers Commission','NASA safety culture — how disasters changed spaceflight'];
-    if (l.includes('falcon') || l.includes('spacex')) return ['SpaceX Starship — Mars architecture and 2030 forecast','Merlin engine — how SpaceX reinvented rocket propulsion','Elon Musk vs NASA — new space vs old space comparison'];
-    if (l.includes('isro') || l.includes('chandrayaan')) return ['Mangalyaan — India reaches Mars on first attempt','Gaganyaan — India\'s first crewed spaceflight program','ISRO vs CNSA — India vs China space race 2030'];
-    if (l.includes('f-22') || l.includes('raptor')) return ['F-35 Lightning II — joint strike fighter deep dive','B-21 Raider — next generation stealth bomber','NGAD — 6th generation fighter 2030 forecast'];
-    if (l.includes('gagarin')) return ['Alan Shepard — America\'s first astronaut profile','Valentina Tereshkova — first woman in space','Vostok program — Soviet crewed spaceflight archive'];
-    return ['Apollo 11 — one giant leap for mankind archive','Voyager 1 — humanity\'s farthest spacecraft','James Webb Space Telescope — eye of the universe'];
-  }
-
-  function esc(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  document.getElementById('query-input').addEventListener('keydown', e => { if(e.key==='Enter') runQuery(); });
+function x(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 </script>
 </body>
 </html>
