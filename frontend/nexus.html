@@ -9,415 +9,578 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f8fafc;
-      --bg-tertiary: #f1f5f9;
-      --bg-info: #eff6ff;
-      --bg-danger: #fef2f2;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-tertiary: #94a3b8;
-      --text-info: #1d4ed8;
-      --text-danger: #dc2626;
-      --border-light: rgba(15,23,42,0.1);
-      --border-mid: rgba(15,23,42,0.18);
-      --border-info: #93c5fd;
-      --border-danger: #fca5a5;
-      --radius-md: 8px;
-      --radius-lg: 12px;
-      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --blue: #3b82f6;
+      --blue-bright: #60a5fa;
+      --cyan: #06b6d4;
+      --purple: #8b5cf6;
+      --green: #10b981;
+      --orange: #f59e0b;
+      --red: #ef4444;
+      --bg0: #020818;
+      --bg1: #070f1e;
+      --bg2: #0d1a2e;
+      --bg3: #122040;
+      --text1: #e2e8f0;
+      --text2: #94a3b8;
+      --text3: #475569;
+      --border: rgba(59,130,246,0.2);
+      --border-bright: rgba(59,130,246,0.5);
+      --glow: 0 0 20px rgba(59,130,246,0.3);
+      --glow-strong: 0 0 40px rgba(59,130,246,0.5);
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-primary: #0f172a;
-        --bg-secondary: #1e293b;
-        --bg-tertiary: #0f172a;
-        --bg-info: #1e3a5f;
-        --bg-danger: #3b0f0f;
-        --text-primary: #f1f5f9;
-        --text-secondary: #94a3b8;
-        --text-tertiary: #64748b;
-        --text-info: #60a5fa;
-        --text-danger: #f87171;
-        --border-light: rgba(255,255,255,0.08);
-        --border-mid: rgba(255,255,255,0.15);
-        --border-info: #1d4ed8;
-        --border-danger: #7f1d1d;
-      }
+    html, body {
+      height: 100%; width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg0);
+      color: var(--text1);
+      overflow: hidden;
     }
 
-    html, body { height: 100%; font-family: var(--font-sans); background: var(--bg-tertiary); color: var(--text-primary); }
+    /* STARFIELD */
+    #stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.05) 0%, transparent 60%),
+        var(--bg0);
+    }
+    #stars::before, #stars::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 70%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 75%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 5% 90%, rgba(100,180,255,0.8) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 50% 5%, rgba(100,180,255,0.7) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 95% 40%, rgba(180,100,255,0.8) 0%, transparent 100%);
+    }
+    #stars::after {
+      background-image:
+        radial-gradient(1px 1px at 8% 30%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 22% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 65%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 25%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 38% 88%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 18% 42%, rgba(255,255,255,0.3) 0%, transparent 100%);
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle { 0%{opacity:0.5} 100%{opacity:1} }
 
-    #nexus-app {
-      max-width: 1100px;
-      margin: 0 auto;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-primary);
-      border-left: 0.5px solid var(--border-light);
-      border-right: 0.5px solid var(--border-light);
+    /* LAYOUT */
+    #app {
+      position: relative; z-index: 1;
+      height: 100vh; display: flex; flex-direction: column;
     }
 
-    /* ── HEADER ── */
-    #nexus-header {
-      background: #0a0f1e;
-      padding: 16px 24px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* HEADER */
+    #header {
       flex-shrink: 0;
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(2,8,24,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      position: relative;
     }
-    .logo-block { display: flex; align-items: center; gap: 12px; }
-    .logo-icon {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: linear-gradient(135deg, #1e40af, #6d28d9);
+    #header::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blue), var(--cyan), var(--purple), transparent);
+      animation: scanline 3s linear infinite;
+    }
+    @keyframes scanline { 0%{opacity:0.4} 50%{opacity:1} 100%{opacity:0.4} }
+
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-hex {
+      width: 38px; height: 38px; position: relative;
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px; color: #fff; font-weight: 700;
     }
-    .logo-name { font-size: 15px; font-weight: 600; color: #e2e8f0; letter-spacing: 0.06em; }
-    .logo-sub { font-size: 10px; color: #64748b; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1px; }
-    .nexus-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #4ade80; letter-spacing: 0.06em; }
-    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: pulse-dot 2s infinite; }
-    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.35} }
+    .logo-hex svg { position: absolute; }
+    .logo-hex .hex-spin { animation: spin-slow 8s linear infinite; }
+    @keyframes spin-slow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .logo-hex .hex-inner { font-size: 16px; position: relative; z-index: 1; }
+    .logo-name {
+      font-size: 18px; font-weight: 700; letter-spacing: 0.1em;
+      background: linear-gradient(135deg, #fff 0%, var(--blue-bright) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo-sub { font-size: 9px; color: var(--text3); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 2px; }
 
-    /* ── NAV ── */
-    #nexus-nav {
-      background: #0d1526;
-      padding: 0 16px;
-      display: flex;
-      gap: 0;
-      overflow-x: auto;
-      flex-shrink: 0;
-      border-bottom: 1px solid #1e293b;
-      scrollbar-width: none;
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .nexus-badge {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      color: var(--green); text-transform: uppercase;
+      padding: 4px 10px; border-radius: 99px;
+      border: 1px solid rgba(16,185,129,0.3);
+      background: rgba(16,185,129,0.08);
+      animation: pulse-badge 2s ease-in-out infinite;
     }
-    #nexus-nav::-webkit-scrollbar { display: none; }
+    @keyframes pulse-badge { 0%,100%{box-shadow:0 0 8px rgba(16,185,129,0.2)} 50%{box-shadow:0 0 16px rgba(16,185,129,0.5)} }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-dot 1.5s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)} }
+
+    .back-link {
+      font-size: 11px; color: var(--text2); text-decoration: none;
+      display: flex; align-items: center; gap: 5px; letter-spacing: 0.05em;
+      padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .back-link:hover { color: var(--blue-bright); border-color: var(--border-bright); }
+
+    /* NAV */
+    #nav {
+      flex-shrink: 0;
+      display: flex; gap: 0; padding: 0 16px;
+      background: rgba(7,15,30,0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto; scrollbar-width: none;
+    }
+    #nav::-webkit-scrollbar { display: none; }
     .nav-tab {
-      padding: 10px 14px;
-      font-size: 12px;
-      color: #64748b;
-      cursor: pointer;
+      padding: 12px 16px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+      color: var(--text3); cursor: pointer;
+      border: none; background: none;
       border-bottom: 2px solid transparent;
       white-space: nowrap;
-      background: none;
-      border-top: none; border-left: none; border-right: none;
-      letter-spacing: 0.04em;
-      display: flex; align-items: center; gap: 6px;
-      transition: color 0.15s, border-color 0.15s;
+      display: flex; align-items: center; gap: 7px;
+      transition: all 0.2s; text-transform: uppercase;
     }
-    .nav-tab:hover { color: #94a3b8; }
-    .nav-tab.active { color: #60a5fa; border-bottom-color: #3b82f6; }
-    .nav-tab i { font-size: 14px; }
+    .nav-tab:hover { color: var(--text2); }
+    .nav-tab.active { color: var(--blue-bright); border-bottom-color: var(--blue); }
+    .nav-tab.active i { filter: drop-shadow(0 0 4px var(--blue)); }
 
-    /* ── BODY ── */
-    #nexus-body { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    /* BODY */
+    #body { display: flex; flex: 1; min-height: 0; }
 
-    /* ── SIDEBAR ── */
-    #nexus-sidebar {
-      width: 200px;
-      flex-shrink: 0;
-      background: var(--bg-secondary);
-      border-right: 0.5px solid var(--border-light);
-      overflow-y: auto;
-      padding: 10px 0;
+    /* SIDEBAR */
+    #sidebar {
+      width: 200px; flex-shrink: 0;
+      background: rgba(7,15,30,0.6);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid var(--border);
+      overflow-y: auto; padding: 12px 0;
       scrollbar-width: thin;
+      scrollbar-color: var(--bg3) transparent;
     }
-    .sidebar-label {
-      font-size: 10px; font-weight: 600; color: var(--text-tertiary);
-      letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 6px 14px 4px;
+    .sb-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--text3); text-transform: uppercase;
+      padding: 8px 14px 4px;
     }
-    .sidebar-item {
-      padding: 7px 14px;
-      font-size: 13px;
-      color: var(--text-secondary);
+    .sb-item {
+      padding: 8px 14px;
+      font-size: 12px; color: var(--text2);
       cursor: pointer;
       display: flex; align-items: center; gap: 8px;
       border-left: 2px solid transparent;
-      transition: background 0.1s, color 0.1s;
+      transition: all 0.15s; letter-spacing: 0.02em;
     }
-    .sidebar-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-    .sidebar-item.active { background: var(--bg-info); color: var(--text-info); border-left-color: #3b82f6; font-weight: 500; }
-    .sidebar-item i { font-size: 14px; opacity: 0.8; }
+    .sb-item:hover { background: rgba(59,130,246,0.08); color: var(--text1); border-left-color: rgba(59,130,246,0.3); }
+    .sb-item.active { background: rgba(59,130,246,0.12); color: var(--blue-bright); border-left-color: var(--blue); font-weight: 500; }
+    .sb-item.active i { filter: drop-shadow(0 0 4px var(--blue)); }
+    .sb-item i { font-size: 14px; }
 
-    /* ── MAIN ── */
-    #nexus-main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+    /* MAIN */
+    #main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 
-    #query-bar {
-      padding: 12px 16px;
-      border-bottom: 0.5px solid var(--border-light);
-      display: flex; gap: 8px; align-items: center;
+    /* QUERY BAR */
+    #query-zone {
       flex-shrink: 0;
-      background: var(--bg-primary);
+      padding: 14px 16px 10px;
+      background: rgba(7,15,30,0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
     }
+    #query-row { display: flex; gap: 10px; margin-bottom: 10px; }
     #query-input {
-      flex: 1;
-      padding: 8px 12px;
-      border: 0.5px solid var(--border-mid);
-      border-radius: var(--radius-md);
-      font-size: 13px;
-      font-family: var(--font-sans);
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      outline: none;
+      flex: 1; padding: 10px 16px;
+      background: rgba(13,26,46,0.8);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px; color: var(--text1);
+      font-family: inherit; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.02em;
     }
-    #query-input:focus { border-color: #3b82f6; }
-    #query-input::placeholder { color: var(--text-tertiary); }
+    #query-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15), var(--glow);
+    }
+    #query-input::placeholder { color: var(--text3); }
     #query-btn {
-      padding: 8px 14px;
-      background: #1d4ed8;
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-md);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
-      white-space: nowrap;
-      transition: background 0.15s;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #1d4ed8, #4f46e5);
+      color: #fff; border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+      cursor: pointer; display: flex; align-items: center; gap: 7px;
+      white-space: nowrap; text-transform: uppercase;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(59,130,246,0.3);
     }
-    #query-btn:hover { background: #2563eb; }
-    #query-btn:disabled { background: #374151; cursor: not-allowed; opacity: 0.6; }
+    #query-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,0.5); }
+    #query-btn:active { transform: translateY(0); }
+    #query-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    #mode-chips {
-      display: flex; gap: 6px; flex-wrap: wrap;
-      padding: 8px 16px 10px;
-      flex-shrink: 0;
-      border-bottom: 0.5px solid var(--border-light);
-    }
+    #mode-row { display: flex; gap: 6px; flex-wrap: wrap; }
     .mode-chip {
-      padding: 4px 10px;
-      font-size: 11px;
-      border-radius: 99px;
-      border: 0.5px solid var(--border-light);
-      color: var(--text-secondary);
-      cursor: pointer;
-      background: var(--bg-secondary);
-      transition: all 0.12s;
+      padding: 5px 12px; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 99px; cursor: pointer;
+      border: 1px solid var(--border);
+      color: var(--text3); background: rgba(13,26,46,0.5);
+      transition: all 0.2s;
     }
-    .mode-chip.active { background: var(--bg-info); border-color: #3b82f6; color: var(--text-info); font-weight: 600; }
+    .mode-chip:hover { border-color: var(--border-bright); color: var(--text2); }
+    .mode-chip.active {
+      background: rgba(59,130,246,0.15);
+      border-color: var(--blue);
+      color: var(--blue-bright);
+      box-shadow: 0 0 10px rgba(59,130,246,0.2);
+    }
 
-    #nexus-content { flex: 1; overflow-y: auto; padding: 16px; scrollbar-width: thin; }
+    /* CONTENT */
+    #content { flex: 1; overflow-y: auto; padding: 20px; scrollbar-width: thin; scrollbar-color: var(--bg3) transparent; }
 
-    /* ── WELCOME ── */
-    .welcome-title { font-size: 22px; font-weight: 500; color: var(--text-primary); margin-bottom: 6px; }
-    .welcome-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.65; }
+    /* WELCOME */
+    #welcome { padding: 8px 0; }
+    .welcome-title {
+      font-size: 28px; font-weight: 800; letter-spacing: 0.04em;
+      background: linear-gradient(135deg, #fff 0%, var(--blue-bright) 40%, var(--cyan) 70%, var(--purple) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 8px;
+    }
+    .welcome-sub { font-size: 14px; color: var(--text2); line-height: 1.7; margin-bottom: 28px; max-width: 700px; }
 
-    .metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-    .metric-box { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; text-align: center; }
-    .metric-box .m-num { font-size: 22px; font-weight: 500; color: var(--text-primary); }
-    .metric-box .m-lbl { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
+    .metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px; }
+    .metric {
+      background: rgba(13,26,46,0.6);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px;
+      text-align: center; position: relative; overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .metric:hover { border-color: var(--border-bright); box-shadow: var(--glow); }
+    .metric::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+    .metric-num {
+      font-size: 28px; font-weight: 800; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .metric-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; letter-spacing: 0.08em; text-transform: uppercase; }
 
-    .section-label { font-size: 10px; font-weight: 600; color: var(--text-tertiary); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+    .section-hdr {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--text3); text-transform: uppercase;
+      margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-hdr::before { content:''; width:3px; height:12px; background:linear-gradient(180deg,var(--blue),var(--cyan)); border-radius:2px; }
 
-    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 10px; margin-bottom: 28px; }
     .quick-card {
-      background: var(--bg-secondary);
-      border: 0.5px solid var(--border-light);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
+      background: rgba(13,26,46,0.6);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px;
+      cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
     }
-    .quick-card:hover { border-color: var(--border-mid); background: var(--bg-primary); }
-    .quick-card .qc-icon { font-size: 20px; color: #3b82f6; margin-bottom: 8px; }
-    .quick-card .qc-label { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
-    .quick-card .qc-desc { font-size: 11px; color: var(--text-tertiary); line-height: 1.5; }
+    .quick-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(59,130,246,0.05), transparent);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .quick-card:hover { border-color: var(--border-bright); transform: translateY(-2px); box-shadow: var(--glow); }
+    .quick-card:hover::before { opacity: 1; }
+    .qc-icon { font-size: 22px; color: var(--blue-bright); margin-bottom: 10px; display: block; }
+    .qc-label { font-size: 13px; font-weight: 600; color: var(--text1); margin-bottom: 4px; }
+    .qc-desc { font-size: 11px; color: var(--text3); line-height: 1.5; }
 
-    .suggest-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .suggest-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .suggest-btn {
-      font-size: 11px; padding: 5px 11px;
-      border-radius: var(--radius-md);
-      border: 0.5px solid var(--border-mid);
-      color: var(--text-secondary);
-      background: var(--bg-secondary);
-      cursor: pointer;
-      transition: all 0.12s;
+      font-size: 11px; padding: 6px 12px; border-radius: 6px;
+      border: 1px solid var(--border); color: var(--text2);
+      background: rgba(13,26,46,0.5); cursor: pointer;
+      transition: all 0.2s; letter-spacing: 0.03em;
     }
-    .suggest-btn:hover { border-color: #3b82f6; color: #3b82f6; }
+    .suggest-btn:hover { border-color: var(--blue); color: var(--blue-bright); background: rgba(59,130,246,0.08); box-shadow: 0 0 10px rgba(59,130,246,0.15); }
 
-    /* ── RESULTS ── */
-    .ai-response-card {
-      background: var(--bg-primary);
-      border: 0.5px solid var(--border-light);
-      border-radius: var(--radius-lg);
-      padding: 16px 18px;
-      margin-bottom: 12px;
+    /* RESPONSE CARD */
+    .response-card {
+      background: rgba(13,26,46,0.7);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 22px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
+      animation: card-in 0.4s ease-out;
+      position: relative; overflow: hidden;
     }
-    .ai-response-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 12px; }
-    .ai-response-topic { font-size: 15px; font-weight: 500; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-    .ai-response-topic i { color: #3b82f6; font-size: 16px; flex-shrink: 0; }
-    .ai-response-mode { font-size: 10px; color: var(--text-tertiary); background: var(--bg-secondary); padding: 3px 8px; border-radius: 99px; border: 0.5px solid var(--border-light); letter-spacing: 0.05em; white-space: nowrap; flex-shrink: 0; }
-    .ai-response-body { font-size: 13px; color: var(--text-secondary); line-height: 1.8; white-space: pre-wrap; }
-
-    .ai-thinking { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-tertiary); padding: 12px 0; }
-    .think-dots span { display: inline-block; width: 5px; height: 5px; background: #3b82f6; border-radius: 50%; animation: think 1.2s ease-in-out infinite; }
-    .think-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .think-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes think { 0%,80%,100%{transform:scale(0.6);opacity:0.35} 40%{transform:scale(1);opacity:1} }
-
-    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-    .tag { font-size: 11px; padding: 3px 9px; border-radius: 99px; border: 0.5px solid var(--border-info); color: var(--text-info); background: var(--bg-info); cursor: pointer; }
-
-    .section-divider { height: 0.5px; background: var(--border-light); margin: 14px 0; }
-
-    .history-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border-light); cursor: pointer; }
-    .history-item:hover .hist-q { color: #3b82f6; }
-    .hist-icon { color: #3b82f6; font-size: 14px; margin-top: 2px; flex-shrink: 0; }
-    .hist-q { font-size: 13px; color: var(--text-primary); line-height: 1.4; }
-    .hist-meta { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
-
-    .error-box { background: var(--bg-danger); border: 0.5px solid var(--border-danger); border-radius: var(--radius-md); padding: 12px 14px; font-size: 13px; color: var(--text-danger); }
-
-    .back-to-explorer {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 11px; color: #60a5fa;
-      text-decoration: none; letter-spacing: 0.04em;
+    @keyframes card-in { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .response-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--purple));
+      animation: shimmer 2s linear infinite;
+      background-size: 200% 100%;
     }
-    .back-to-explorer:hover { color: #93c5fd; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-    @media (max-width: 640px) {
-      #nexus-sidebar { display: none; }
-      .metric-row { grid-template-columns: repeat(3, 1fr); }
+    .response-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 12px; }
+    .response-topic {
+      font-size: 16px; font-weight: 700; color: var(--text1);
+      display: flex; align-items: center; gap: 10px; letter-spacing: 0.02em;
     }
+    .response-topic i { color: var(--blue-bright); font-size: 18px; filter: drop-shadow(0 0 6px var(--blue)); }
+    .response-mode {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cyan); padding: 3px 10px; border-radius: 99px;
+      border: 1px solid rgba(6,182,212,0.3); background: rgba(6,182,212,0.08);
+      white-space: nowrap; flex-shrink: 0;
+    }
+
+    .response-body {
+      font-size: 14px; color: var(--text2); line-height: 1.85;
+      white-space: pre-wrap; letter-spacing: 0.01em;
+    }
+    .response-body strong { color: var(--text1); font-weight: 600; }
+
+    /* STREAMING CURSOR */
+    .cursor { display: inline-block; width: 2px; height: 14px; background: var(--blue-bright); margin-left: 2px; animation: blink 0.8s step-end infinite; vertical-align: middle; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 99px;
+      border: 1px solid rgba(59,130,246,0.4);
+      color: var(--blue-bright); background: rgba(59,130,246,0.1);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .tag:hover { background: rgba(59,130,246,0.2); box-shadow: 0 0 8px rgba(59,130,246,0.3); }
+
+    .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+    .related-label { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+
+    /* THINKING */
+    .thinking-card {
+      background: rgba(13,26,46,0.7);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px 22px;
+      display: flex; flex-direction: column; gap: 16px;
+      animation: card-in 0.3s ease-out;
+    }
+    .thinking-header { display: flex; align-items: center; gap: 12px; }
+    .thinking-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; animation: rotate-glow 2s linear infinite;
+    }
+    @keyframes rotate-glow {
+      0%{box-shadow:0 0 10px rgba(59,130,246,0.5)} 
+      50%{box-shadow:0 0 20px rgba(139,92,246,0.7)} 
+      100%{box-shadow:0 0 10px rgba(59,130,246,0.5)}
+    }
+    .thinking-text { font-size: 14px; font-weight: 600; color: var(--text1); letter-spacing: 0.04em; }
+    .thinking-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+    .scan-bar {
+      height: 2px; border-radius: 2px;
+      background: var(--bg3); overflow: hidden; position: relative;
+    }
+    .scan-bar-fill {
+      height: 100%; width: 40%;
+      background: linear-gradient(90deg, transparent, var(--blue), var(--cyan), transparent);
+      animation: scan 1.5s ease-in-out infinite;
+    }
+    @keyframes scan { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
+
+    .data-lines { display: flex; flex-direction: column; gap: 6px; }
+    .data-line {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 11px; font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--text3); opacity: 0;
+      animation: line-in 0.4s ease-out forwards;
+    }
+    .data-line:nth-child(1) { animation-delay: 0.1s; }
+    .data-line:nth-child(2) { animation-delay: 0.3s; }
+    .data-line:nth-child(3) { animation-delay: 0.5s; }
+    .data-line:nth-child(4) { animation-delay: 0.7s; }
+    @keyframes line-in { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+    .dl-label { color: var(--blue-bright); min-width: 140px; }
+    .dl-value { color: var(--green); animation: flicker 3s step-end infinite; }
+    @keyframes flicker { 0%,95%,100%{opacity:1} 96%,99%{opacity:0.7} }
+
+    /* ERROR */
+    .error-card {
+      background: rgba(30,10,10,0.8);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 10px; padding: 16px 18px;
+      font-size: 13px; color: #fca5a5;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .error-card i { font-size: 18px; color: var(--red); flex-shrink: 0; }
+
+    /* HISTORY */
+    .history-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .history-item:hover .hi-q { color: var(--blue-bright); }
+    .hi-icon { color: var(--blue); font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+    .hi-q { font-size: 13px; color: var(--text1); line-height: 1.4; }
+    .hi-meta { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+    @media (max-width: 640px) { #sidebar { display: none; } }
   </style>
 </head>
 <body>
+<div id="stars"></div>
+<div id="app">
 
-<div id="nexus-app">
-
-  <div id="nexus-header">
-    <div class="logo-block">
-      <div class="logo-icon" aria-hidden="true">⬡</div>
+  <div id="header">
+    <div class="logo">
+      <div class="logo-hex">
+        <svg class="hex-spin" width="38" height="38" viewBox="0 0 38 38">
+          <polygon points="19,2 35,11 35,27 19,36 3,27 3,11" fill="none" stroke="url(#hg)" stroke-width="1.5"/>
+          <defs><linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
+        </svg>
+        <span class="hex-inner">⬡</span>
+      </div>
       <div>
         <div class="logo-name">ORBITIQ NEXUS</div>
         <div class="logo-sub">Global Aerospace Knowledge Archive</div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:16px;">
-      <a href="../index.html" class="back-to-explorer"><i class="ti ti-arrow-left"></i> Explorer</a>
-      <div class="nexus-status">
-        <div class="status-dot"></div>
-        NEXUS ACTIVE
-      </div>
+    <div class="header-right">
+      <a href="../index.html" class="back-link"><i class="ti ti-arrow-left"></i> Explorer</a>
+      <div class="nexus-badge"><div class="badge-dot"></div> NEXUS ONLINE</div>
     </div>
   </div>
 
-  <div id="nexus-nav">
-    <button class="nav-tab active" onclick="switchTab('archive')" id="tab-archive">
-      <i class="ti ti-database"></i> Archive
-    </button>
-    <button class="nav-tab" onclick="switchTab('mission')" id="tab-mission">
-      <i class="ti ti-rocket"></i> Mission Intel
-    </button>
-    <button class="nav-tab" onclick="switchTab('failure')" id="tab-failure">
-      <i class="ti ti-alert-triangle"></i> Failure Analysis
-    </button>
-    <button class="nav-tab" onclick="switchTab('future')" id="tab-future">
-      <i class="ti ti-telescope"></i> Future Forecast
-    </button>
-    <button class="nav-tab" onclick="switchTab('history')" id="tab-history">
-      <i class="ti ti-clock-history"></i> Query Log
-    </button>
+  <div id="nav">
+    <button class="nav-tab active" onclick="switchTab('archive','tab-archive')" id="tab-archive"><i class="ti ti-database"></i> Archive</button>
+    <button class="nav-tab" onclick="switchTab('mission','tab-mission')" id="tab-mission"><i class="ti ti-rocket"></i> Mission Intel</button>
+    <button class="nav-tab" onclick="switchTab('failure','tab-failure')" id="tab-failure"><i class="ti ti-alert-triangle"></i> Failure Analysis</button>
+    <button class="nav-tab" onclick="switchTab('future','tab-future')" id="tab-future"><i class="ti ti-telescope"></i> Future Forecast</button>
+    <button class="nav-tab" onclick="switchTab('history','tab-history')" id="tab-history"><i class="ti ti-clock-history"></i> Query Log</button>
   </div>
 
-  <div id="nexus-body">
-    <div id="nexus-sidebar">
-      <div class="sidebar-label">Domains</div>
-      <div class="sidebar-item active" onclick="sidebarQuery(this,'aircraft overview — most significant military and civilian aircraft in history')"><i class="ti ti-plane"></i> Aircraft</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'spacecraft overview — most significant crewed and uncrewed spacecraft in history')"><i class="ti ti-rocket"></i> Spacecraft</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'satellite programs overview — Sputnik to modern megaconstellations, technology and strategic impact')"><i class="ti ti-satellite"></i> Satellites</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'launch vehicles — from V2 to Saturn V to Falcon 9 and SLS, evolution and capabilities')"><i class="ti ti-arrow-bar-up"></i> Launch Vehicles</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'UAV and drone programs globally — military, combat, autonomous systems and future directions')"><i class="ti ti-drone"></i> UAV / Drones</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'missile programs globally — ballistic, cruise, hypersonic — technical history and strategic significance')"><i class="ti ti-bolt"></i> Missiles</div>
-
-      <div class="sidebar-label" style="margin-top:8px;">Organizations</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'NASA complete archive — history, major programs, missions, achievements, failures, 2030 outlook')"><i class="ti ti-star"></i> NASA</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'ISRO complete archive — India space program history, missions, achievements and future plans')"><i class="ti ti-star"></i> ISRO</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'SpaceX complete archive — founding, Falcon 9, Dragon, Starship, reusability revolution')"><i class="ti ti-star"></i> SpaceX</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'Roscosmos and Soviet space program — from Sputnik through ISS to current status')"><i class="ti ti-star"></i> Roscosmos</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'CNSA archive — China space program, Tiangong, Chang\'e, Tianwen, 2030 strategic outlook')"><i class="ti ti-star"></i> CNSA</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'ESA archive — European Space Agency history, Ariane program, major missions and future')"><i class="ti ti-star"></i> ESA</div>
-
-      <div class="sidebar-label" style="margin-top:8px;">Eras</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'Aerospace pioneers era 1903–1957 — Wright Brothers through early jet age, key aircraft and milestones')"><i class="ti ti-history"></i> Pioneers 1903–1957</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'Space Race era 1957–1972 — Sputnik to Apollo, Cold War aerospace competition')"><i class="ti ti-history"></i> Space Race 1957–72</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'Space Shuttle era 1972–2011 — program history, 135 missions, achievements and disasters')"><i class="ti ti-history"></i> Shuttle Era 1972–2011</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'New Space era 2010s — commercial space revolution, reusability, cubesats, democratization of space')"><i class="ti ti-history"></i> New Space 2010s+</div>
-      <div class="sidebar-item" onclick="sidebarQuery(this,'Future aerospace 2030–2050 — lunar bases, Mars, hypersonics, hydrogen aviation, interplanetary future')"><i class="ti ti-telescope"></i> Future 2030–2050</div>
+  <div id="body">
+    <div id="sidebar">
+      <div class="sb-label">Domains</div>
+      <div class="sb-item active" onclick="sbQuery(this,'aircraft overview — most significant military and civilian aircraft in history from WW1 to stealth jets')"><i class="ti ti-plane"></i> Aircraft</div>
+      <div class="sb-item" onclick="sbQuery(this,'spacecraft overview — most significant crewed and uncrewed spacecraft in history from Vostok to Starship')"><i class="ti ti-rocket"></i> Spacecraft</div>
+      <div class="sb-item" onclick="sbQuery(this,'satellite programs — Sputnik to modern megaconstellations, technology and strategic impact')"><i class="ti ti-satellite"></i> Satellites</div>
+      <div class="sb-item" onclick="sbQuery(this,'launch vehicles — from V2 to Saturn V to Falcon 9 Heavy and SLS, evolution and capabilities')"><i class="ti ti-arrow-bar-up"></i> Launch Vehicles</div>
+      <div class="sb-item" onclick="sbQuery(this,'UAV and drone programs globally — Predator, Reaper, autonomous combat systems and future directions')"><i class="ti ti-drone"></i> UAV / Drones</div>
+      <div class="sb-item" onclick="sbQuery(this,'missile programs globally — ICBM, cruise missiles, hypersonic glide vehicles — technical history')"><i class="ti ti-bolt"></i> Missiles</div>
+      <div class="sb-label">Organizations</div>
+      <div class="sb-item" onclick="sbQuery(this,'NASA complete archive — Mercury Gemini Apollo Shuttle Artemis — full history achievements and future')"><i class="ti ti-star"></i> NASA</div>
+      <div class="sb-item" onclick="sbQuery(this,'ISRO complete archive — India space program from Aryabhata to Chandrayaan Mangalyaan Gaganyaan')"><i class="ti ti-star"></i> ISRO</div>
+      <div class="sb-item" onclick="sbQuery(this,'SpaceX complete archive — Falcon 1 to Starship, reusability revolution, Elon Musk Mars vision')"><i class="ti ti-star"></i> SpaceX</div>
+      <div class="sb-item" onclick="sbQuery(this,'Roscosmos and Soviet space program — Sputnik Vostok Soyuz MIR ISS to current status')"><i class="ti ti-star"></i> Roscosmos</div>
+      <div class="sb-item" onclick="sbQuery(this,'CNSA archive — Long March, Tiangong, Chang\'e lunar program, Tianwen Mars, 2030 ambitions')"><i class="ti ti-star"></i> CNSA</div>
+      <div class="sb-item" onclick="sbQuery(this,'ESA archive — Ariane rockets, Rosetta, Mars Express, Galileo, James Webb partnership')"><i class="ti ti-star"></i> ESA</div>
+      <div class="sb-label">Eras</div>
+      <div class="sb-item" onclick="sbQuery(this,'Aerospace pioneers era 1903–1957 — Wright Brothers through jet age, breaking sound barrier, key milestones')"><i class="ti ti-history"></i> Pioneers 1903–57</div>
+      <div class="sb-item" onclick="sbQuery(this,'Space Race 1957–1972 — Sputnik to Apollo, Cold War competition, heroes of the space age')"><i class="ti ti-history"></i> Space Race 57–72</div>
+      <div class="sb-item" onclick="sbQuery(this,'Space Shuttle era 1981–2011 — 135 missions, Challenger Columbia disasters, ISS construction legacy')"><i class="ti ti-history"></i> Shuttle Era</div>
+      <div class="sb-item" onclick="sbQuery(this,'New Space revolution 2010s — commercial launchers, reusability, cubesats, private astronauts')"><i class="ti ti-history"></i> New Space 2010s+</div>
+      <div class="sb-item" onclick="sbQuery(this,'Future aerospace 2030–2050 — lunar bases, Mars missions, nuclear propulsion, space tourism')"><i class="ti ti-telescope"></i> Future 2030–2050</div>
     </div>
 
-    <div id="nexus-main">
-      <div id="query-bar">
-        <input id="query-input" type="text" placeholder="Query the NEXUS — mission, vehicle, person, event, failure, technology…" />
-        <button id="query-btn" onclick="runQuery()"><i class="ti ti-search"></i> Query</button>
+    <div id="main">
+      <div id="query-zone">
+        <div id="query-row">
+          <input id="query-input" type="text" placeholder="⚡ Query the NEXUS — mission, vehicle, disaster, pioneer, technology, future…" />
+          <button id="query-btn" onclick="runQuery()"><i class="ti ti-search"></i> Launch Query</button>
+        </div>
+        <div id="mode-row">
+          <div class="mode-chip active" onclick="setMode(this,'archive')">📁 Archive Record</div>
+          <div class="mode-chip" onclick="setMode(this,'technical')">⚙️ Technical Deep Dive</div>
+          <div class="mode-chip" onclick="setMode(this,'failure')">⚠️ Failure Analysis</div>
+          <div class="mode-chip" onclick="setMode(this,'timeline')">📅 Timeline Evolution</div>
+          <div class="mode-chip" onclick="setMode(this,'forecast')">🔭 Future Forecast</div>
+          <div class="mode-chip" onclick="setMode(this,'crew')">👨‍🚀 Crew Profile</div>
+          <div class="mode-chip" onclick="setMode(this,'compare')">🌍 Nation Compare</div>
+        </div>
       </div>
-      <div id="mode-chips">
-        <div class="mode-chip active" onclick="setMode(this,'archive')">Archive Record</div>
-        <div class="mode-chip" onclick="setMode(this,'technical')">Technical Deep Dive</div>
-        <div class="mode-chip" onclick="setMode(this,'failure')">Failure Analysis</div>
-        <div class="mode-chip" onclick="setMode(this,'timeline')">Timeline Evolution</div>
-        <div class="mode-chip" onclick="setMode(this,'forecast')">Future Forecast</div>
-        <div class="mode-chip" onclick="setMode(this,'crew')">Crew Profile</div>
-        <div class="mode-chip" onclick="setMode(this,'compare')">Nation Compare</div>
-      </div>
-      <div id="nexus-content">
-        <div id="welcome-screen">
-          <div class="welcome-title" style="margin-top:8px;">NEXUS Archive Online</div>
-          <div class="welcome-sub">Query any aerospace subject — missions, vehicles, people, failures, technologies, or nations — across all of human aviation and space history from 1903 to the far future.</div>
 
-          <div class="metric-row">
-            <div class="metric-box"><div class="m-num">120+</div><div class="m-lbl">Years covered</div></div>
-            <div class="metric-box"><div class="m-num">24</div><div class="m-lbl">Nations indexed</div></div>
-            <div class="metric-box"><div class="m-num">∞</div><div class="m-lbl">AI depth</div></div>
+      <div id="content">
+        <div id="welcome">
+          <div class="welcome-title">NEXUS ARCHIVE ONLINE</div>
+          <div class="welcome-sub">The world's most comprehensive AI-powered aerospace knowledge engine. Query any mission, vehicle, disaster, pioneer, or technology across 120+ years of human flight — from Kitty Hawk to the Moon, Mars, and beyond.</div>
+
+          <div class="metrics">
+            <div class="metric"><div class="metric-num">120+</div><div class="metric-lbl">Years Documented</div></div>
+            <div class="metric"><div class="metric-num">24</div><div class="metric-lbl">Nations Indexed</div></div>
+            <div class="metric"><div class="metric-num">∞</div><div class="metric-lbl">AI Intelligence Depth</div></div>
           </div>
 
-          <div class="section-label">Quick access</div>
+          <div class="section-hdr">Quick Access — High Priority Records</div>
           <div class="quick-grid">
-            <div class="quick-card" onclick="preset('Apollo 13 failure analysis — root cause, timeline, corrective actions')">
-              <div class="qc-icon"><i class="ti ti-alert-triangle"></i></div>
+            <div class="quick-card" onclick="preset('Apollo 13 — complete failure analysis, oxygen tank explosion, NASA crisis response, heroes of mission control')">
+              <i class="qc-icon ti ti-alert-triangle"></i>
               <div class="qc-label">Apollo 13</div>
-              <div class="qc-desc">Failure analysis, root cause, lessons</div>
+              <div class="qc-desc">Failure analysis, mission control heroics</div>
             </div>
-            <div class="quick-card" onclick="preset('F-22 Raptor complete technical archive — systems, propulsion, stealth, history')">
-              <div class="qc-icon"><i class="ti ti-plane"></i></div>
+            <div class="quick-card" onclick="preset('F-22 Raptor — complete technical archive, stealth systems, supercruise, AESA radar, air superiority dominance')">
+              <i class="qc-icon ti ti-plane"></i>
               <div class="qc-label">F-22 Raptor</div>
-              <div class="qc-desc">Systems, stealth, combat history</div>
+              <div class="qc-desc">5th gen stealth, systems deep dive</div>
             </div>
-            <div class="quick-card" onclick="preset('ISRO Chandrayaan program — all missions, technical details, significance')">
-              <div class="qc-icon"><i class="ti ti-moon"></i></div>
+            <div class="quick-card" onclick="preset('ISRO Chandrayaan program — Chandrayaan 1, 2, 3 missions complete archive, Vikram lander, Pragyan rover, south pole landing')">
+              <i class="qc-icon ti ti-moon"></i>
               <div class="qc-label">Chandrayaan</div>
-              <div class="qc-desc">India lunar exploration archive</div>
+              <div class="qc-desc">India conquers the lunar south pole</div>
             </div>
-            <div class="quick-card" onclick="preset('SpaceX Falcon 9 booster reusability — evolution timeline and future')">
-              <div class="qc-icon"><i class="ti ti-rocket"></i></div>
+            <div class="quick-card" onclick="preset('SpaceX Falcon 9 — reusability revolution, booster landing evolution, reliability record, commercial dominance')">
+              <i class="qc-icon ti ti-rocket"></i>
               <div class="qc-label">Falcon 9</div>
-              <div class="qc-desc">Reusability revolution timeline</div>
+              <div class="qc-desc">The reusability revolution timeline</div>
             </div>
-            <div class="quick-card" onclick="preset('Yuri Gagarin crew profile — full biography, Vostok 1 mission details, legacy')">
-              <div class="qc-icon"><i class="ti ti-user"></i></div>
+            <div class="quick-card" onclick="preset('Yuri Gagarin — complete crew profile, Vostok 1 mission, 108 minutes that changed history, legacy')">
+              <i class="qc-icon ti ti-user-star"></i>
               <div class="qc-label">Yuri Gagarin</div>
               <div class="qc-desc">First human in space — full profile</div>
             </div>
-            <div class="quick-card" onclick="preset('Hypersonic weapons and vehicles — global programs 2025 and future forecast to 2040')">
-              <div class="qc-icon"><i class="ti ti-bolt"></i></div>
+            <div class="quick-card" onclick="preset('Hypersonic weapons global race — US, China, Russia programs, Mach 20+ vehicles, 2040 strategic forecast')">
+              <i class="qc-icon ti ti-bolt"></i>
               <div class="qc-label">Hypersonics</div>
-              <div class="qc-desc">Global programs, 2040 outlook</div>
+              <div class="qc-desc">Global arms race, 2040 outlook</div>
             </div>
           </div>
 
-          <div class="section-label">Suggested queries</div>
+          <div class="section-hdr">Suggested Intelligence Queries</div>
           <div class="suggest-row">
-            <button class="suggest-btn" onclick="preset('Challenger disaster — complete failure analysis')">Challenger disaster</button>
-            <button class="suggest-btn" onclick="preset('SR-71 Blackbird technical deep dive')">SR-71 Blackbird</button>
-            <button class="suggest-btn" onclick="preset('Artemis program — mission architecture and 2030 outlook')">Artemis program</button>
-            <button class="suggest-btn" onclick="preset('China aerospace rise — CNSA history and strategic outlook')">CNSA rise</button>
-            <button class="suggest-btn" onclick="preset('Kalpana Chawla crew profile and STS-107 mission')">Kalpana Chawla</button>
-            <button class="suggest-btn" onclick="preset('Wright Flyer to Boeing 787 — aviation evolution timeline')">Aviation timeline</button>
-            <button class="suggest-btn" onclick="preset('MQ-9 Reaper UAV — technical archive and operational history')">MQ-9 Reaper</button>
-            <button class="suggest-btn" onclick="preset('Mars colonization — 2040 to 2060 forecast and technology requirements')">Mars forecast</button>
+            <button class="suggest-btn" onclick="preset('Challenger disaster — O-ring failure, Rogers Commission, NASA culture, full investigation')">🔥 Challenger disaster</button>
+            <button class="suggest-btn" onclick="preset('SR-71 Blackbird — Mach 3.2, J58 engine, reconnaissance missions, technical masterpiece')">✈️ SR-71 Blackbird</button>
+            <button class="suggest-btn" onclick="preset('Artemis program — return to Moon, Gateway station, SLS Orion, 2030 lunar base vision')">🌕 Artemis program</button>
+            <button class="suggest-btn" onclick="preset('China aerospace rise — Long March 5, Tiangong station, Chang\'e 6 sample return, 2035 ambitions')">🇨🇳 CNSA rise</button>
+            <button class="suggest-btn" onclick="preset('Kalpana Chawla — biography, STS-87, STS-107 Columbia disaster, India\'s space hero')">🌟 Kalpana Chawla</button>
+            <button class="suggest-btn" onclick="preset('Wright Flyer to Boeing 787 — complete aviation evolution, 120 years of flight technology')">📅 Aviation timeline</button>
+            <button class="suggest-btn" onclick="preset('MQ-9 Reaper — predator lineage, combat record, autonomous AI future, drone warfare doctrine')">🤖 MQ-9 Reaper</button>
+            <button class="suggest-btn" onclick="preset('Mars colonization 2040–2060 — SpaceX Starship, NASA architecture, life support, first settlers')">🔴 Mars forecast</button>
           </div>
         </div>
         <div id="result-area" style="display:none;"></div>
@@ -427,18 +590,18 @@
 </div>
 
 <script>
-  const ANTHROPIC_API = 'https://orbitiq-nexus-proxy.mahin-aeroai.workers.dev';
+  const PROXY = 'https://orbitiq-nexus-proxy.mahin-aeroai.workers.dev';
   let currentMode = 'archive';
   let queryHistory = [];
 
   const modePrompts = {
-    archive: `You are ORBITIQ NEXUS, an elite aerospace historian and knowledge archivist. Respond as a comprehensive archive record. Structure: EXECUTIVE SUMMARY | HISTORICAL CONTEXT | TECHNICAL OVERVIEW | TIMELINE | KEY FACTS | STRATEGIC SIGNIFICANCE | RELATED PROGRAMS. Write in authoritative intelligence-report prose mixed with structured data. Include numerical specifications where known. Be thorough and precise.`,
-    technical: `You are ORBITIQ NEXUS Systems Engineering Module. Structure: PROPULSION | AERODYNAMICS/ORBITAL MECHANICS | STRUCTURES & MATERIALS | GNC (Guidance, Navigation, Control) | POWER SYSTEMS | COMMUNICATIONS | KEY INNOVATIONS | ENGINEERING CHALLENGES SOLVED. Include TRL references, design tradeoffs, and failure modes analyzed during development. Engineering-level precision required.`,
-    failure: `You are ORBITIQ NEXUS Failure Analysis Module. Structure: INCIDENT OVERVIEW | TIMELINE OF EVENTS | ROOT CAUSE ANALYSIS (proximate + systemic) | CONTRIBUTING FACTORS | HUMAN FACTORS | ORGANIZATIONAL FACTORS | CORRECTIVE ACTIONS TAKEN | DESIGN CHANGES IMPLEMENTED | LESSONS LEARNED | LEGACY AND IMPACT ON AEROSPACE SAFETY. Never minimize failures — they are engineering knowledge.`,
-    timeline: `You are ORBITIQ NEXUS Timeline Engine. Show the complete evolutionary lineage. Format: [YEAR — Program/Vehicle] → [next generation] with what changed, what was learned, what improved. Show the full arc from origins to present to projected future. Include key decision points, pivots, and dead ends in the evolutionary tree.`,
-    forecast: `You are ORBITIQ NEXUS Future Intelligence Engine. Structure: CURRENT STATUS (2025) | NEAR-TERM 2028–2032 | MID-TERM 2033–2040 | FAR-TERM 2041–2050 | ENABLING TECHNOLOGIES REQUIRED | STRATEGIC IMPLICATIONS | COMMERCIAL OPPORTUNITIES | NATIONAL SECURITY DIMENSIONS | WILDCARD SCENARIOS. Ground forecasts in real physics and current program trajectories.`,
-    crew: `You are ORBITIQ NEXUS Personnel Archive. Provide: FULL BIOGRAPHY | EDUCATIONAL PATH | MILITARY/PROFESSIONAL BACKGROUND | SELECTION & TRAINING | MISSION RECORD (all missions with roles) | KEY CONTRIBUTIONS | AWARDS & RECOGNITION | LEGACY & INFLUENCE | CURRENT STATUS. Treat every crew member as a historical figure worthy of complete documentation.`,
-    compare: `You are ORBITIQ NEXUS Comparative Intelligence Module. Structure: comparison across PROGRAM HISTORY | TECHNICAL CAPABILITIES | ORGANIZATIONAL STRUCTURE | BUDGET & INVESTMENT | KEY ACHIEVEMENTS | FAILURES & LESSONS | INTERNATIONAL COLLABORATIONS | STRATEGIC OBJECTIVES | 2030 COMPETITIVE OUTLOOK. Data-driven, geopolitically aware, analytically neutral.`
+    archive: `You are ORBITIQ NEXUS — the world's most authoritative aerospace knowledge archive. You are an elite aerospace historian, systems engineer, and intelligence analyst combined. Write with the authority of a NASA technical report, the depth of Jane's Defence Weekly, and the narrative power of a National Geographic documentary. Structure your response with clear SECTION HEADERS in capitals, bold key technical terms, include real specifications and numbers. Be comprehensive, precise, and absolutely authoritative. This is a permanent archive record — make it worthy of that mission.`,
+    technical: `You are ORBITIQ NEXUS Systems Engineering Module. Write with extreme technical precision. Use section headers: PROPULSION SYSTEMS | AERODYNAMICS & STRUCTURES | GUIDANCE NAVIGATION & CONTROL | AVIONICS & SENSORS | POWER SYSTEMS | KEY INNOVATIONS | ENGINEERING BREAKTHROUGHS. Include real specifications: thrust figures, ISP values, materials, frequencies, dimensions. Reference design tradeoffs, failure modes, and TRL levels. This is an engineering archive — be authoritative and precise.`,
+    failure: `You are ORBITIQ NEXUS Failure Analysis Module — modeled on NTSB and NASA Accident Investigation reports. Structure: INCIDENT CLASSIFICATION | SEQUENCE OF EVENTS (with timestamps) | ROOT CAUSE ANALYSIS | CONTRIBUTING FACTORS | ORGANIZATIONAL & HUMAN FACTORS | CORRECTIVE ACTIONS | DESIGN CHANGES | LESSONS LEARNED | IMPACT ON AEROSPACE SAFETY. Be unflinching — failures are sacred engineering knowledge. Never minimize. Every detail matters.`,
+    timeline: `You are ORBITIQ NEXUS Timeline Engine. Map the complete evolutionary lineage with maximum drama and technical depth. For each generation show: [YEAR] — NAME — what changed, what breakthrough occurred, what was retired, what lesson drove the next generation. Show the full technology tree including dead ends and pivots. From origins to present to the projected future. Make the reader feel the sweep of history.`,
+    forecast: `You are ORBITIQ NEXUS Future Intelligence Engine. Write like a top-tier strategic intelligence brief. Structure: CURRENT STATE ASSESSMENT (2025) | NEAR-TERM 2026–2030 | MID-TERM 2031–2040 | FAR-TERM 2041–2050 | DISRUPTIVE TECHNOLOGIES | GEOPOLITICAL IMPLICATIONS | COMMERCIAL OPPORTUNITIES | WILDCARD SCENARIOS. Ground every forecast in real physics, funded programs, and current trajectory. Be bold but evidence-based.`,
+    crew: `You are ORBITIQ NEXUS Personnel Archive. Write the definitive profile of this individual. Structure: BIOGRAPHICAL OVERVIEW | EDUCATION & EARLY CAREER | MILITARY/PROFESSIONAL BACKGROUND | ASTRONAUT/PILOT SELECTION | TRAINING PROGRAM | COMPLETE MISSION RECORD | KEY CONTRIBUTIONS TO AEROSPACE | DEFINING MOMENTS | AWARDS & RECOGNITION | LEGACY. Write with the gravitas their contribution deserves.`,
+    compare: `You are ORBITIQ NEXUS Comparative Intelligence Module. Conduct a rigorous multi-dimensional comparison. Structure: HISTORICAL DEVELOPMENT | TECHNICAL CAPABILITIES | ORGANIZATIONAL ARCHITECTURE | BUDGET & RESOURCES | LANDMARK ACHIEVEMENTS | NOTABLE FAILURES & RECOVERY | INTERNATIONAL PARTNERSHIPS | STRATEGIC DOCTRINE | 2030 COMPETITIVE OUTLOOK | VERDICT. Be analytically sharp, data-driven, and geopolitically aware.`
   };
 
   const modeIcons = {
@@ -446,11 +609,12 @@
     timeline:'ti-timeline', forecast:'ti-telescope', crew:'ti-user-star', compare:'ti-arrows-diff'
   };
 
-  const tabQueries = {
-    mission: 'Document the most significant space missions in history — mission architecture, objectives, outcomes, and lasting impact',
-    failure: 'Analyze the most important aerospace disasters and failures in history — what went wrong, what was learned, how they changed aerospace safety',
-    future: 'Forecast the future of aerospace and space exploration from 2025 to 2050 — missions, technologies, and strategic developments'
-  };
+  const thinkingLines = [
+    ['QUERYING KNOWLEDGE BASE', 'AEROSPACE ARCHIVE v4.2'],
+    ['CROSS-REFERENCING SOURCES', '120+ years of records'],
+    ['COMPILING INTELLIGENCE', 'Synthesizing data streams'],
+    ['GENERATING ARCHIVE RECORD', 'Engaging AI core...']
+  ];
 
   function setMode(el, mode) {
     document.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
@@ -458,53 +622,52 @@
     currentMode = mode;
   }
 
-  function switchTab(tab) {
+  function switchTab(tab, id) {
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById(id).classList.add('active');
+    const tabQ = {
+      archive: null,
+      mission: 'The most significant space missions in history — Apollo, Voyager, Hubble, Cassini, Curiosity, JWST — mission architecture, heroics, and lasting impact on human knowledge',
+      failure: 'The most consequential aerospace disasters in history — Challenger, Columbia, Apollo 1, KAL 007, Air France 447 — complete failure analysis and what they taught us',
+      future: 'The future of aerospace and space exploration 2025 to 2060 — Starship, Artemis lunar base, Mars colonies, hypersonics, nuclear propulsion, orbital tourism — bold authoritative forecast'
+    };
     if (tab === 'archive') { showWelcome(); }
     else if (tab === 'history') { showHistory(); }
-    else { runQueryWith(tabQueries[tab]); }
+    else { runQueryWith(tabQ[tab]); }
   }
 
-  function sidebarQuery(el, q) {
-    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  function sbQuery(el, q) {
+    document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
     el.classList.add('active');
     runQueryWith(q);
   }
 
-  function preset(q) {
-    document.getElementById('query-input').value = q;
-    runQuery();
-  }
+  function preset(q) { document.getElementById('query-input').value = q; runQuery(); }
 
   function showWelcome() {
-    document.getElementById('welcome-screen').style.display = 'block';
+    document.getElementById('welcome').style.display = 'block';
     document.getElementById('result-area').style.display = 'none';
   }
 
   function showHistory() {
-    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('welcome').style.display = 'none';
     const ra = document.getElementById('result-area');
     ra.style.display = 'block';
     if (!queryHistory.length) {
-      ra.innerHTML = '<div style="font-size:13px;color:var(--text-tertiary);padding:16px 0;">No queries yet. Start exploring the archive.</div>';
+      ra.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:20px 0;text-align:center;">No queries yet. The archive awaits.</div>';
       return;
     }
-    ra.innerHTML = '<div class="section-label">Query log</div>' +
+    ra.innerHTML = '<div class="section-hdr">Query Log — Session Archive</div>' +
       queryHistory.map((h,i) =>
         `<div class="history-item" onclick="rerunQuery(${i})">
-          <i class="ti ti-search hist-icon"></i>
-          <div><div class="hist-q">${esc(h.q)}</div><div class="hist-meta">${h.mode} · ${h.time}</div></div>
-        </div>`
-      ).join('');
+          <i class="ti ti-search hi-icon"></i>
+          <div><div class="hi-q">${esc(h.q)}</div><div class="hi-meta">${h.mode} MODE · ${h.time}</div></div>
+        </div>`).join('');
   }
 
   function rerunQuery(i) {
     const h = queryHistory[i];
     document.getElementById('query-input').value = h.q;
-    document.querySelectorAll('.mode-chip').forEach(c => {
-      if (c.textContent.toLowerCase().replace(' ','') === h.mode.toLowerCase().replace(' ','')) c.click();
-    });
     runQuery();
   }
 
@@ -517,22 +680,26 @@
     const q = document.getElementById('query-input').value.trim();
     if (!q) return;
 
-    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('welcome').style.display = 'none';
     const ra = document.getElementById('result-area');
     ra.style.display = 'block';
 
-    const modeLabel = currentMode.charAt(0).toUpperCase() + currentMode.slice(1);
     const icon = modeIcons[currentMode] || 'ti-database';
+    const modeLabel = currentMode.toUpperCase();
 
+    // Show thinking card with animated data lines
     ra.innerHTML = `
-      <div class="ai-response-card">
-        <div class="ai-response-header">
-          <div class="ai-response-topic"><i class="ti ${icon}"></i>${esc(q.length > 70 ? q.slice(0,70)+'…' : q)}</div>
-          <div class="ai-response-mode">${modeLabel}</div>
+      <div class="thinking-card">
+        <div class="thinking-header">
+          <div class="thinking-icon">⬡</div>
+          <div>
+            <div class="thinking-text">NEXUS PROCESSING QUERY</div>
+            <div class="thinking-sub">Searching ${(120 + Math.floor(Math.random()*30)).toLocaleString()}+ years of aerospace intelligence…</div>
+          </div>
         </div>
-        <div class="ai-thinking">
-          <div class="think-dots"><span></span><span></span><span></span></div>
-          NEXUS processing…
+        <div class="scan-bar"><div class="scan-bar-fill"></div></div>
+        <div class="data-lines">
+          ${thinkingLines.map(([l,v]) => `<div class="data-line"><span class="dl-label">${l}</span><span class="dl-value">${v}</span></div>`).join('')}
         </div>
       </div>`;
 
@@ -540,14 +707,14 @@
     btn.disabled = true;
 
     try {
-      const res = await fetch(ANTHROPIC_API, {
+      const res = await fetch(PROXY, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
           max_tokens: 1000,
           system: modePrompts[currentMode],
-          messages: [{ role: 'user', content: `NEXUS QUERY: ${q}\n\nRespond as ORBITIQ NEXUS — the world's most comprehensive aerospace knowledge archive. Be thorough, authoritative, and analytically precise.` }]
+          messages: [{ role: 'user', content: `NEXUS ARCHIVE QUERY: ${q}\n\nGenerate a comprehensive archive record. Be authoritative, detailed, and analytically precise. Use bold headers and real specifications. Make this worthy of the ORBITIQ NEXUS knowledge archive.` }]
         })
       });
 
@@ -555,7 +722,7 @@
 
       if (data.error || !data.content) {
         const errMsg = data.error ? `${data.error.type}: ${data.error.message}` : `Unexpected response: ${JSON.stringify(data).slice(0,200)}`;
-        ra.innerHTML = `<div class="error-box"><i class="ti ti-alert-circle"></i> NEXUS API error: ${esc(errMsg)}</div>`;
+        ra.innerHTML = `<div class="error-card"><i class="ti ti-alert-circle"></i> NEXUS ERROR: ${esc(errMsg)}</div>`;
         btn.disabled = false;
         return;
       }
@@ -567,51 +734,76 @@
       queryHistory.unshift({ q, mode: modeLabel, time: new Date().toLocaleTimeString() });
       if (queryHistory.length > 30) queryHistory.pop();
 
+      // Format text with bold headers
+      const formatted = formatText(text);
+
       ra.innerHTML = `
-        <div class="ai-response-card">
-          <div class="ai-response-header">
-            <div class="ai-response-topic"><i class="ti ${icon}"></i>${esc(q.length > 70 ? q.slice(0,70)+'…' : q)}</div>
-            <div class="ai-response-mode">${modeLabel}</div>
+        <div class="response-card">
+          <div class="response-header">
+            <div class="response-topic"><i class="ti ${icon}"></i>${esc(q.length > 80 ? q.slice(0,80)+'…' : q)}</div>
+            <div class="response-mode">${modeLabel}</div>
           </div>
-          <div class="ai-response-body">${esc(text)}</div>
+          <div class="response-body">${formatted}</div>
           ${domains.length ? `<div class="tag-row">${domains.map(d=>`<span class="tag">${d}</span>`).join('')}</div>` : ''}
-          ${related.length ? `<div class="section-divider"></div><div class="section-label">Related queries</div><div class="suggest-row">${related.map(r=>`<button class="suggest-btn" onclick="preset(${JSON.stringify(r)})">${esc(r)}</button>`).join('')}</div>` : ''}
+          ${related.length ? `<div class="divider"></div><div class="related-label">⚡ Related Intelligence Queries</div><div class="suggest-row">${related.map(r=>`<button class="suggest-btn" onclick="preset(${JSON.stringify(r)})">${esc(r)}</button>`).join('')}</div>` : ''}
         </div>`;
+
     } catch(e) {
-      ra.innerHTML = `<div class="error-box"><i class="ti ti-alert-circle"></i> NEXUS query failed: ${esc(e.message)}</div>`;
+      ra.innerHTML = `<div class="error-card"><i class="ti ti-alert-circle"></i> NEXUS CONNECTION ERROR: ${esc(e.message)}</div>`;
     }
     btn.disabled = false;
   }
 
+  function formatText(text) {
+    return text
+      .split('\n')
+      .map(line => {
+        // ALL CAPS lines become glowing headers
+        if (/^[A-Z\s&\/\-|]{6,}$/.test(line.trim()) && line.trim().length > 3) {
+          return `<div style="color:var(--blue-bright);font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;margin:16px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(59,130,246,0.3)">${esc(line)}</div>`;
+        }
+        // Lines starting with ▸ • → get styled
+        if (/^[▸•→\-\*]/.test(line.trim())) {
+          return `<div style="padding-left:12px;border-left:2px solid rgba(59,130,246,0.3);margin:3px 0;color:var(--text2)">${esc(line)}</div>`;
+        }
+        return esc(line);
+      })
+      .join('\n')
+      .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text1)">$1</strong>')
+      .replace(/`([^`]+)`/g, '<code style="background:rgba(59,130,246,0.1);color:var(--cyan);padding:1px 5px;border-radius:4px;font-size:12px">$1</code>');
+  }
+
   function detectDomains(text) {
     const t = text.toLowerCase(), tags = [];
-    if (t.includes('nasa') || t.includes('apollo') || t.includes('shuttle')) tags.push('NASA');
+    if (t.includes('nasa') || t.includes('apollo')) tags.push('NASA');
     if (t.includes('spacex') || t.includes('falcon') || t.includes('starship')) tags.push('SpaceX');
     if (t.includes('isro') || t.includes('india') || t.includes('chandrayaan')) tags.push('ISRO');
     if (t.includes('russia') || t.includes('soviet') || t.includes('soyuz')) tags.push('Roscosmos');
     if (t.includes('china') || t.includes('cnsa') || t.includes('tiangong')) tags.push('CNSA');
-    if (t.includes('failure') || t.includes('disaster') || t.includes('accident')) tags.push('Failure Analysis');
+    if (t.includes('failure') || t.includes('disaster')) tags.push('Failure Analysis');
     if (t.includes('hypersonic') || t.includes('stealth') || t.includes('missile')) tags.push('Defense');
-    if (t.includes('uav') || t.includes('drone') || t.includes('reaper')) tags.push('UAV');
-    if (t.includes('propulsion') || t.includes('engine') || t.includes('thrust')) tags.push('Propulsion');
-    return tags.slice(0,4);
+    if (t.includes('uav') || t.includes('drone')) tags.push('UAV');
+    if (t.includes('propulsion') || t.includes('engine')) tags.push('Propulsion');
+    if (t.includes('mars') || t.includes('lunar') || t.includes('moon')) tags.push('Deep Space');
+    return tags.slice(0,5);
   }
 
   function generateRelated(q) {
     const l = q.toLowerCase();
-    if (l.includes('apollo')) return ['Apollo 1 fire — failure analysis','Saturn V technical deep dive','Gemini program — Apollo precursor timeline'];
-    if (l.includes('shuttle') || l.includes('challenger') || l.includes('columbia')) return ['Columbia STS-107 failure analysis','Space Shuttle Main Engine development','Post-Shuttle future of crewed spaceflight'];
-    if (l.includes('falcon') || l.includes('spacex')) return ['Merlin engine development timeline','SpaceX vs ULA competition analysis','Starship — 2030 Mars forecast'];
-    if (l.includes('isro') || l.includes('india')) return ['Chandrayaan-3 landing mission archive','Gaganyaan crewed mission forecast','India vs China space race comparison'];
-    if (l.includes('f-22') || l.includes('raptor')) return ['F-35 vs F-22 technical comparison','Stealth technology evolution timeline','NGAD sixth-generation fighter forecast'];
-    return ['Aerospace disasters — top 10 failure analyses','Future Mars architecture 2040 forecast','Space race nations comparison 2025'];
+    if (l.includes('apollo 13')) return ['Apollo 1 fire — complete failure analysis','Saturn V — the greatest rocket ever built','Gene Kranz crew profile — flight director legend'];
+    if (l.includes('challenger')) return ['Columbia STS-107 — second shuttle tragedy','Richard Feynman O-ring demonstration — Rogers Commission','NASA safety culture — how disasters changed spaceflight'];
+    if (l.includes('falcon') || l.includes('spacex')) return ['SpaceX Starship — Mars architecture and 2030 forecast','Merlin engine — how SpaceX reinvented rocket propulsion','Elon Musk vs NASA — new space vs old space comparison'];
+    if (l.includes('isro') || l.includes('chandrayaan')) return ['Mangalyaan — India reaches Mars on first attempt','Gaganyaan — India\'s first crewed spaceflight program','ISRO vs CNSA — India vs China space race 2030'];
+    if (l.includes('f-22') || l.includes('raptor')) return ['F-35 Lightning II — joint strike fighter deep dive','B-21 Raider — next generation stealth bomber','NGAD — 6th generation fighter 2030 forecast'];
+    if (l.includes('gagarin')) return ['Alan Shepard — America\'s first astronaut profile','Valentina Tereshkova — first woman in space','Vostok program — Soviet crewed spaceflight archive'];
+    return ['Apollo 11 — one giant leap for mankind archive','Voyager 1 — humanity\'s farthest spacecraft','James Webb Space Telescope — eye of the universe'];
   }
 
   function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  document.getElementById('query-input').addEventListener('keydown', e => { if (e.key === 'Enter') runQuery(); });
+  document.getElementById('query-input').addEventListener('keydown', e => { if(e.key==='Enter') runQuery(); });
 </script>
 </body>
 </html>
