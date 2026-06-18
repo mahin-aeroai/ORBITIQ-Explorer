@@ -801,14 +801,16 @@ function renderAll() {
   const grid = document.getElementById('records-grid');
 
   if (DB.records.length === 0) {
-    container.style.display = 'none'; empty.style.display = 'flex'; return;
+    container.style.display = 'none'; empty.style.display = 'flex';
+    grid.innerHTML = ''; return;
   }
   container.style.display = 'block'; empty.style.display = 'none';
 
-  const label = activeTab === 'all' ? 'All Records' : ET[activeTab]?.label || activeTab;
+  const label = activeTab === 'all' ? 'All Records' : (ET[activeTab] ? ET[activeTab].label : activeTab);
   document.getElementById('records-title-text').textContent = label;
   document.getElementById('records-count-badge').textContent = filtered.length;
 
+  // Always clear before rebuild — prevents duplicate DOM nodes
   grid.innerHTML = filtered.map(r => buildCardHTML(r)).join('');
 }
 
@@ -817,7 +819,15 @@ function renderRecord(record) {
   const empty = document.getElementById('empty-state');
   container.style.display = 'block'; empty.style.display = 'none';
 
-  if (activeTab !== 'all' && activeTab !== record.type) { updateCounts(); return; }
+  // Only add card to DOM if it matches current tab and doesn't already exist
+  if (document.getElementById('card-' + record.id)) return; // already rendered
+  if (activeTab !== 'all' && activeTab !== record.type) {
+    // Not visible in current tab — just update badge count
+    const filtered = activeTab === 'all' ? DB.records : DB.records.filter(r=>r.type===activeTab);
+    const count = document.getElementById('records-count-badge');
+    if (count) count.textContent = filtered.length;
+    return;
+  }
 
   const grid = document.getElementById('records-grid');
   const count = document.getElementById('records-count-badge');
@@ -833,6 +843,11 @@ function updateCounts() {
   const filtered = activeTab === 'all' ? DB.records : DB.records.filter(r=>r.type===activeTab);
   const count = document.getElementById('records-count-badge');
   if (count) count.textContent = filtered.length;
+}
+
+function updateAllTabCounts() {
+  // Refresh the visible count badge only — no DOM duplication
+  updateCounts();
 }
 
 function buildCardHTML(r) {
