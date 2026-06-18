@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ORBITIQ NEXUS — Data Population Engine</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#020c1b;--bg1:#071428;--bg2:#0c1f3d;--bg3:#0a1628;
+  --blue:#2563eb;--cyan:#0891b2;--purple:#7c3aed;--green:#059669;--amber:#d97706;--red:#dc2626;
+  --blue-l:#60a5fa;--cyan-l:#22d3ee;--purple-l:#a78bfa;--green-l:#34d399;--amber-l:#fbbf24;
+  --t1:#f8fafc;--t2:#94a3b8;--t3:#475569;
+  --bd:rgba(37,99,235,.2);--bd2:rgba(37,99,235,.45);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:'SF Mono','Fira Code','Consolas',monospace;
+}
+html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--font);overflow:hidden}
+
+/* BG */
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:#fff;animation:tw var(--d,3s) ease-in-out infinite alternate}
+@keyframes tw{0%{opacity:.05}100%{opacity:.6}}
+
+/* LAYOUT */
+#app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column}
+
+/* HEADER */
+#hdr{
+  height:52px;padding:0 20px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(2,12,27,.9);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bd);
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-orb{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+  box-shadow:0 0 14px rgba(37,99,235,.5);
+}
+.logo-name{font-size:14px;font-weight:800;letter-spacing:.1em;background:linear-gradient(135deg,#fff,var(--cyan-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-tag{font-size:9px;color:var(--t3);letter-spacing:.15em;text-transform:uppercase;margin-top:1px}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.hdr-stat{display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:6px;border:1px solid var(--bd);background:rgba(7,20,40,.6)}
+.hdr-stat .n{font-weight:700;color:var(--cyan-l)}
+.hdr-stat .l{color:var(--t3)}
+
+/* CONTENT */
+#body{display:flex;flex:1;min-height:0}
+
+/* PHASE PANEL */
+#phases{
+  width:220px;flex-shrink:0;
+  background:rgba(7,14,28,.8);backdrop-filter:blur(10px);
+  border-right:1px solid var(--bd);
+  overflow-y:auto;padding:12px 0;
+  scrollbar-width:thin;scrollbar-color:var(--bd) transparent;
+}
+.ph-hdr{font-size:9px;font-weight:700;letter-spacing:.18em;color:var(--t3);text-transform:uppercase;padding:6px 14px 4px}
+.phase-btn{
+  width:100%;padding:10px 14px;background:none;border:none;
+  border-left:3px solid transparent;cursor:pointer;
+  text-align:left;transition:.15s;
+}
+.phase-btn:hover{background:rgba(37,99,235,.07)}
+.phase-btn.on{background:rgba(37,99,235,.12);border-left-color:var(--blue-l)}
+.ph-num{font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--t3);text-transform:uppercase;margin-bottom:3px}
+.ph-name{font-size:13px;font-weight:600;color:var(--t1)}
+.ph-sub{font-size:10px;color:var(--t3);margin-top:2px;line-height:1.4}
+.ph-count{display:inline-flex;align-items:center;gap:3px;font-size:10px;margin-top:4px;padding:2px 7px;border-radius:99px;background:rgba(37,99,235,.15);color:var(--blue-l);border:1px solid rgba(37,99,235,.3)}
+.ph-count.done{background:rgba(5,150,105,.15);color:var(--green-l);border-color:rgba(5,150,105,.3)}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+
+/* CONTROLS */
+#ctrl{
+  flex-shrink:0;padding:12px 16px;
+  background:rgba(7,14,28,.85);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:10px;
+}
+.ctrl-info{flex:1}
+.ctrl-phase-name{font-size:14px;font-weight:700;color:var(--t1);letter-spacing:.03em}
+.ctrl-phase-sub{font-size:11px;color:var(--t3);margin-top:2px}
+.btn{
+  padding:8px 16px;border:none;border-radius:7px;
+  font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  transition:.15s;
+}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.35)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.5)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-ghost{background:rgba(37,99,235,.1);color:var(--blue-l);border:1px solid var(--bd);padding:7px 12px}
+.btn-ghost:hover{background:rgba(37,99,235,.2)}
+.btn-danger{background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.3);padding:7px 12px}
+.btn-danger:hover{background:rgba(220,38,38,.25)}
+.prog-wrap{margin-top:8px;height:4px;background:var(--bd);border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--cyan-l));transition:width .5s ease}
+
+/* ENTITY TABS */
+#entity-tabs{
+  display:flex;gap:0;padding:0 16px;
+  background:rgba(2,12,27,.7);border-bottom:1px solid var(--bd);
+  overflow-x:auto;scrollbar-width:none;flex-shrink:0;
+}
+#entity-tabs::-webkit-scrollbar{display:none}
+.etab{
+  padding:8px 14px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--t3);cursor:pointer;border:none;background:none;
+  border-bottom:2px solid transparent;white-space:nowrap;transition:.15s;
+}
+.etab:hover{color:var(--t2)}
+.etab.on{color:var(--blue-l);border-bottom-color:var(--blue)}
+
+/* CONTENT */
+#content{flex:1;display:flex;min-height:0}
+
+/* DATABASE VIEW */
+#db-view{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--bd) transparent}
+
+/* RECORDS GRID */
+.records-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.records-title{font-size:13px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:8px}
+.records-count{font-size:11px;color:var(--t3);padding:2px 8px;border-radius:99px;background:rgba(37,99,235,.12);border:1px solid var(--bd)}
+.records-grid{display:flex;flex-direction:column;gap:8px}
+
+/* RECORD CARD */
+.rec-card{
+  background:rgba(7,20,40,.6);border:1px solid var(--bd);
+  border-radius:10px;overflow:hidden;transition:.15s;
+  animation:card-in .3s ease-out;
+}
+@keyframes card-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.rec-card:hover{border-color:var(--bd2)}
+.rec-card-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;background:rgba(2,12,27,.5);border-bottom:1px solid var(--bd);
+  cursor:pointer;
+}
+.rec-card-hdr:hover .rec-name{color:var(--cyan-l)}
+.rec-entity-type{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-right:8px}
+.rec-name{font-size:13px;font-weight:600;color:var(--t1);flex:1;transition:.15s}
+.rec-id{font-size:10px;color:var(--t3);font-family:var(--mono)}
+.rec-body{padding:12px 14px;display:none}
+.rec-body.open{display:block}
+.rec-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px}
+.rec-field{
+  display:flex;gap:8px;padding:6px 10px;border-radius:6px;
+  background:rgba(2,12,27,.5);border-left:2px solid var(--bd2);
+}
+.rec-fk{font-size:10px;font-weight:600;color:var(--cyan-l);min-width:120px;flex-shrink:0;letter-spacing:.03em}
+.rec-fv{font-size:11px;color:var(--t2);line-height:1.5;word-break:break-word}
+.rec-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.rec-tag{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:99px}
+
+/* RELATIONS */
+.rec-rels{margin-top:10px;padding-top:10px;border-top:1px solid var(--bd)}
+.rel-title{font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--t3);text-transform:uppercase;margin-bottom:6px}
+.rel-list{display:flex;flex-wrap:wrap;gap:5px}
+.rel-chip{font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid;cursor:pointer;transition:.15s}
+.rel-chip:hover{opacity:.8}
+
+/* LOG */
+#log{
+  width:280px;flex-shrink:0;
+  background:rgba(2,8,18,.85);border-left:1px solid var(--bd);
+  display:flex;flex-direction:column;
+}
+#log-hdr{
+  padding:10px 14px;border-bottom:1px solid var(--bd);
+  font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--t3);text-transform:uppercase;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+#log-body{flex:1;overflow-y:auto;padding:8px;scrollbar-width:thin;scrollbar-color:var(--bd) transparent}
+.log-entry{
+  font-family:var(--mono);font-size:10px;padding:3px 6px;border-radius:4px;margin-bottom:3px;
+  border-left:2px solid;animation:card-in .2s ease-out;line-height:1.5;
+}
+.log-info{border-left-color:var(--blue);color:var(--t2)}
+.log-ok{border-left-color:var(--green);color:var(--green-l)}
+.log-warn{border-left-color:var(--amber);color:var(--amber-l)}
+.log-err{border-left-color:var(--red);color:#fca5a5}
+.log-ai{border-left-color:var(--purple);color:var(--purple-l)}
+
+/* EMPTY STATE */
+.empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;gap:12px;color:var(--t3);
+}
+.empty-ico{font-size:40px;opacity:.3}
+.empty-title{font-size:15px;font-weight:600;color:var(--t2)}
+.empty-sub{font-size:12px;text-align:center;max-width:300px;line-height:1.6}
+
+/* ENTITY TYPE COLORS */
+.et-country{background:rgba(37,99,235,.15);color:var(--blue-l)}
+.et-agency{background:rgba(124,58,237,.15);color:var(--purple-l)}
+.et-org{background:rgba(8,145,178,.15);color:var(--cyan-l)}
+.et-mission{background:rgba(217,119,6,.15);color:var(--amber-l)}
+.et-program{background:rgba(5,150,105,.15);color:var(--green-l)}
+.et-vehicle{background:rgba(220,38,38,.15);color:#fca5a5}
+.et-crew{background:rgba(37,99,235,.15);color:var(--blue-l)}
+.et-engineer{background:rgba(124,58,237,.15);color:var(--purple-l)}
+.et-failure{background:rgba(220,38,38,.18);color:#fca5a5}
+.et-lesson{background:rgba(217,119,6,.15);color:var(--amber-l)}
+.et-tech{background:rgba(8,145,178,.15);color:var(--cyan-l)}
+.et-forecast{background:rgba(5,150,105,.15);color:var(--green-l)}
+
+@media(max-width:900px){#log{display:none}#phases{width:170px}}
+@media(max-width:640px){#phases{display:none}}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="app">
+
+<div id="hdr">
+  <div class="logo">
+    <div class="logo-orb">⬡</div>
+    <div>
+      <div class="logo-name">ORBITIQ NEXUS</div>
+      <div class="logo-tag">Population Engine v1.0</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="hdr-stat"><span class="n" id="stat-total">0</span><span class="l">records</span></div>
+    <div class="hdr-stat"><span class="n" id="stat-phase">0/5</span><span class="l">phases</span></div>
+    <div class="hdr-stat"><span class="n" id="stat-relations">0</span><span class="l">relations</span></div>
+  </div>
+</div>
+
+<div id="body">
+
+<!-- PHASE PANEL -->
+<div id="phases">
+  <div class="ph-hdr">Population Phases</div>
+
+  <button class="phase-btn on" onclick="selectPhase(1)" id="ph-btn-1">
+    <div class="ph-num">Phase 1</div>
+    <div class="ph-name">🌍 Foundation</div>
+    <div class="ph-sub">Countries · Agencies · Organizations</div>
+    <div class="ph-count" id="ph-count-1">0 records</div>
+  </button>
+
+  <button class="phase-btn" onclick="selectPhase(2)" id="ph-btn-2">
+    <div class="ph-num">Phase 2</div>
+    <div class="ph-name">🚀 Operations</div>
+    <div class="ph-sub">Missions · Programs · Vehicles</div>
+    <div class="ph-count" id="ph-count-2">0 records</div>
+  </button>
+
+  <button class="phase-btn" onclick="selectPhase(3)" id="ph-btn-3">
+    <div class="ph-num">Phase 3</div>
+    <div class="ph-name">👨‍🚀 Personnel</div>
+    <div class="ph-sub">Crew · Engineers · Flight Directors</div>
+    <div class="ph-count" id="ph-count-3">0 records</div>
+  </button>
+
+  <button class="phase-btn" onclick="selectPhase(4)" id="ph-btn-4">
+    <div class="ph-num">Phase 4</div>
+    <div class="ph-name">⚠️ Intelligence</div>
+    <div class="ph-sub">Failures · Investigations · Lessons</div>
+    <div class="ph-count" id="ph-count-4">0 records</div>
+  </button>
+
+  <button class="phase-btn" onclick="selectPhase(5)" id="ph-btn-5">
+    <div class="ph-num">Phase 5</div>
+    <div class="ph-name">🔭 Future</div>
+    <div class="ph-sub">Technologies · Programs · Forecasts</div>
+    <div class="ph-count" id="ph-count-5">0 records</div>
+  </button>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="ctrl">
+    <div class="ctrl-info">
+      <div class="ctrl-phase-name" id="ctrl-title">Phase 1 — Foundation Layer</div>
+      <div class="ctrl-phase-sub" id="ctrl-sub">Countries · Space Agencies · Organizations</div>
+      <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+    </div>
+    <button class="btn btn-ghost" onclick="populateNext()" id="btn-next" title="Populate one entity"><i class="ti ti-plus"></i> Add One</button>
+    <button class="btn btn-primary" onclick="populatePhase()" id="btn-run"><i class="ti ti-player-play"></i> Run Phase</button>
+    <button class="btn btn-danger" onclick="clearPhase()" id="btn-clear"><i class="ti ti-trash"></i></button>
+  </div>
+
+  <div id="entity-tabs">
+    <button class="etab on" data-tab="all" onclick="switchTab(this,'all')">All Records</button>
+    <button class="etab" data-tab="country" onclick="switchTab(this,'country')">Countries</button>
+    <button class="etab" data-tab="agency" onclick="switchTab(this,'agency')">Agencies</button>
+    <button class="etab" data-tab="org" onclick="switchTab(this,'org')">Organizations</button>
+    <button class="etab" data-tab="mission" onclick="switchTab(this,'mission')">Missions</button>
+    <button class="etab" data-tab="program" onclick="switchTab(this,'program')">Programs</button>
+    <button class="etab" data-tab="vehicle" onclick="switchTab(this,'vehicle')">Vehicles</button>
+    <button class="etab" data-tab="crew" onclick="switchTab(this,'crew')">Crew</button>
+    <button class="etab" data-tab="engineer" onclick="switchTab(this,'engineer')">Engineers</button>
+    <button class="etab" data-tab="failure" onclick="switchTab(this,'failure')">Failures</button>
+    <button class="etab" data-tab="lesson" onclick="switchTab(this,'lesson')">Lessons</button>
+    <button class="etab" data-tab="tech" onclick="switchTab(this,'tech')">Technologies</button>
+    <button class="etab" data-tab="forecast" onclick="switchTab(this,'forecast')">Forecasts</button>
+  </div>
+
+  <div id="content">
+    <div id="db-view">
+      <div class="empty" id="empty-state">
+        <div class="empty-ico">🛰️</div>
+        <div class="empty-title">NEXUS Database Empty</div>
+        <div class="empty-sub">Select a phase and click Run Phase to begin systematic population. The AI will generate real structured aerospace records.</div>
+      </div>
+      <div id="records-container" style="display:none">
+        <div class="records-header">
+          <div class="records-title">
+            <i class="ti ti-database"></i>
+            <span id="records-title-text">All Records</span>
+            <span class="records-count" id="records-count-badge">0</span>
+          </div>
+          <button class="btn btn-ghost" onclick="exportDB()" style="font-size:10px;padding:5px 10px"><i class="ti ti-download"></i> Export JSON</button>
+        </div>
+        <div class="records-grid" id="records-grid"></div>
+      </div>
+    </div>
+
+    <div id="log">
+      <div id="log-hdr">
+        <span>Population Log</span>
+        <button onclick="clearLog()" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:10px">Clear</button>
+      </div>
+      <div id="log-body"></div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+// ── STARS ──────────────────────────────────────────────────────
+(()=>{
+  const bg=document.getElementById('bg');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');s.className='star';
+    s.style.cssText=`width:1px;height:1px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*5}s`;
+    bg.appendChild(s);
+  }
+})();
+
+// ── STATE ──────────────────────────────────────────────────────
+const DB = { records:[], relations:[] };
+let currentPhase = 1;
+let activeTab = 'all';
+let running = false;
+let relationCount = 0;
+
+const PROXY = 'https://orbitiq-nexus-proxy.mahin-aeroai.workers.dev';
+
+// ── PHASE CONFIG ───────────────────────────────────────────────
+const PHASES = {
+  1: {
+    name: 'Phase 1 — Foundation Layer',
+    sub: 'Countries · Space Agencies · Organizations',
+    entities: ['country','country','country','country','country','country','country','country',
+                'agency','agency','agency','agency','agency','agency','agency',
+                'org','org','org','org','org'],
+    color: '#2563eb'
+  },
+  2: {
+    name: 'Phase 2 — Operations Layer',
+    sub: 'Missions · Programs · Launch Vehicles',
+    entities: ['program','program','program','program','program',
+                'mission','mission','mission','mission','mission','mission','mission','mission','mission','mission',
+                'vehicle','vehicle','vehicle','vehicle','vehicle'],
+    color: '#d97706'
+  },
+  3: {
+    name: 'Phase 3 — Personnel Layer',
+    sub: 'Crew Members · Engineers · Flight Directors',
+    entities: ['crew','crew','crew','crew','crew','crew','crew','crew','crew','crew',
+                'engineer','engineer','engineer','engineer','engineer',
+                'crew','crew','crew','crew','crew'],
+    color: '#7c3aed'
+  },
+  4: {
+    name: 'Phase 4 — Intelligence Layer',
+    sub: 'Failures · Investigations · Lessons Learned',
+    entities: ['failure','failure','failure','failure','failure','failure','failure',
+                'lesson','lesson','lesson','lesson','lesson','lesson','lesson','lesson',
+                'failure','failure','lesson','lesson','lesson'],
+    color: '#dc2626'
+  },
+  5: {
+    name: 'Phase 5 — Future Layer',
+    sub: 'Technologies · Future Programs · Forecasts',
+    entities: ['tech','tech','tech','tech','tech','tech','tech','tech',
+                'forecast','forecast','forecast','forecast','forecast','forecast',
+                'tech','tech','tech','tech','forecast','forecast'],
+    color: '#059669'
+  }
+};
+
+// ── AI PROMPTS PER ENTITY TYPE ──────────────────────────────────
+function getPrompt(type, existingNames) {
+  const avoid = existingNames.length ? `Already recorded: ${existingNames.slice(-8).join(', ')}. Generate something DIFFERENT.` : '';
+
+  const prompts = {
+    country: `You are ORBITIQ NEXUS database engine. Generate ONE real aerospace nation record. ${avoid}
+Return ONLY this exact format, no other text:
+NAME: [full country name]
+CODE: [ISO 3-letter code]
+REGION: [geographic region]
+FIRST_FLIGHT: [year or N/A]
+FIRST_SATELLITE: [year or N/A]
+FIRST_ASTRONAUT: [name or N/A]
+BUDGET_USD: [annual space budget in billions, number only]
+KEY_ACHIEVEMENT: [single most important aerospace achievement]
+ACTIVE_PROGRAMS: [3-5 current programs, comma separated]
+STRATEGIC_GOAL: [primary space strategy goal by 2040]
+Choose from major spacefaring nations: USA, Russia, China, India, Japan, France, Germany, UK, Israel, South Korea, Ukraine, Brazil, Australia, Iran, Turkey, UAE, Canada, Italy, ESA-member.`,
+
+    agency: `You are ORBITIQ NEXUS. Generate ONE real space agency record. ${avoid}
+Return ONLY this format:
+NAME: [agency full name]
+ACRONYM: [abbreviation]
+COUNTRY: [country name]
+FOUNDED: [year]
+HQ: [city, country]
+ANNUAL_BUDGET: [USD billions, number only]
+WORKFORCE: [approximate number]
+MISSION_COUNT: [total missions flown]
+SPECIALTY: [primary focus: crewed spaceflight|launch services|earth observation|deep space|military]
+GREATEST_MISSION: [most famous single mission]
+CURRENT_FLAGSHIP: [current active flagship program]
+DIRECTOR: [current or most famous director name]
+Choose real agencies: NASA, Roscosmos, CNSA, ISRO, JAXA, ESA, CNES, DLR, ASI, CSA, KARI, UKSA, AEB, UAESA, ISA.`,
+
+    org: `You are ORBITIQ NEXUS. Generate ONE real aerospace company or organization record. ${avoid}
+Return ONLY this format:
+NAME: [company full name]
+TYPE: [manufacturer|launch_provider|defense|research|commercial]
+COUNTRY: [country]
+FOUNDED: [year]
+REVENUE_USD: [annual revenue in billions]
+WORKFORCE: [employees approximate]
+FLAGSHIP_PRODUCT: [most famous aircraft or spacecraft]
+ROLE: [primary aerospace role]
+NOTABLE_PROGRAM: [most important current program]
+HEADQUARTERS: [city, country]
+Choose real companies: SpaceX, Boeing, Lockheed Martin, Northrop Grumman, Raytheon, Airbus, BAE Systems, Safran, Mitsubishi, HAL, CASC, Roscosmos-corp, Blue Origin, Rocket Lab, Sierra Nevada, Virgin Galactic, Relativity Space, Arianespace.`,
+
+    program: `You are ORBITIQ NEXUS. Generate ONE real major aerospace program record. ${avoid}
+Return ONLY this format:
+NAME: [program full name]
+COUNTRY: [primary country]
+AGENCY: [responsible agency]
+TYPE: [crewed|uncrewed|launch_vehicle|satellite|defense|commercial]
+START_YEAR: [year]
+END_YEAR: [year or ONGOING]
+TOTAL_MISSIONS: [number]
+TOTAL_BUDGET_USD: [billions, number only]
+OBJECTIVE: [primary mission objective, one sentence]
+GREATEST_ACHIEVEMENT: [single most important achievement]
+LEGACY: [what it changed or enabled]
+STATUS: [completed|ongoing|planned|cancelled]
+Choose real programs: Apollo, Mercury, Gemini, Shuttle, ISS, Artemis, Soyuz, Mir, Tiangong, Chandrayaan, Mangalyaan, Voyager, Hubble, JWST, Galileo, GPS, Starlink, OneWeb, Dragon, Starliner.`,
+
+    mission: `You are ORBITIQ NEXUS. Generate ONE real aerospace mission record. ${avoid}
+Return ONLY this format:
+NAME: [mission full name]
+PROGRAM: [parent program]
+COUNTRY: [primary country]
+AGENCY: [responsible agency]
+TYPE: [crewed|lunar|planetary|earth_orbit|deep_space|reconnaissance|commercial]
+LAUNCH_DATE: [YYYY-MM-DD]
+DURATION: [days or hours with unit]
+VEHICLE: [launch vehicle name]
+SPACECRAFT: [spacecraft name]
+CREW: [names or UNCREWED]
+OBJECTIVE: [primary objective, one sentence]
+OUTCOME: [success|partial_success|failure]
+KEY_ACHIEVEMENT: [most important thing accomplished]
+HISTORICAL_SIGNIFICANCE: [why it matters]
+Choose from real missions across all space programs worldwide.`,
+
+    vehicle: `You are ORBITIQ NEXUS. Generate ONE real launch vehicle or aircraft record. ${avoid}
+Return ONLY this format:
+NAME: [vehicle full name]
+TYPE: [launch_vehicle|fighter|bomber|transport|reconnaissance|UAV|spacecraft]
+COUNTRY: [country]
+MANUFACTURER: [company]
+FIRST_FLIGHT: [year]
+STATUS: [active|retired|development]
+PROPULSION: [engine type and fuel]
+THRUST_KN: [total thrust in kilonewtons]
+PAYLOAD_TO_LEO: [kg to LEO or N/A]
+MAX_SPEED: [Mach number or km/h]
+TOTAL_FLIGHTS: [number]
+SUCCESS_RATE: [percentage]
+KEY_INNOVATION: [most important technical innovation]
+RETIRED_YEAR: [year or N/A]
+Choose real vehicles: Saturn V, Falcon 9, Falcon Heavy, Starship, Soyuz, Long March 5, Ariane 5, PSLV, GSLV, Atlas V, Delta IV, Vulcan, New Glenn, H-IIA, ISRO LVM3.`,
+
+    crew: `You are ORBITIQ NEXUS. Generate ONE real astronaut, cosmonaut, or taikonaut record. ${avoid}
+Return ONLY this format:
+NAME: [full name]
+NATIONALITY: [country]
+ROLE: [astronaut|cosmonaut|taikonaut|test_pilot]
+BORN: [year]
+SELECTION_YEAR: [year]
+SELECTION_GROUP: [e.g. NASA Group 9, Cosmonaut Group 1]
+MILITARY_BRANCH: [branch or CIVILIAN]
+RANK: [highest military rank or CIVILIAN]
+MISSIONS: [mission names, comma separated]
+TOTAL_DAYS_IN_SPACE: [number]
+EVA_HOURS: [number or 0]
+FIRST_IN: [what they were first to do, or N/A]
+ACHIEVEMENT: [greatest career achievement]
+STATUS: [active|retired|deceased]
+Choose real crew members from NASA, Roscosmos, CNSA, ISRO, JAXA, ESA.`,
+
+    engineer: `You are ORBITIQ NEXUS. Generate ONE real aerospace engineer or flight director record. ${avoid}
+Return ONLY this format:
+NAME: [full name]
+ROLE: [engineer|flight_director|mission_controller|program_manager|scientist]
+NATIONALITY: [country]
+BORN: [year]
+ORGANIZATION: [employer agency or company]
+SPECIALTY: [propulsion|guidance|structures|flight_ops|systems_engineering|mission_planning]
+CAREER_START: [year]
+MOST_FAMOUS_FOR: [primary achievement or role]
+PROGRAMS: [programs worked on, comma separated]
+INNOVATION: [key technical contribution]
+LEGACY: [lasting impact on aerospace]
+STATUS: [active|retired|deceased]
+Choose real figures: Wernher von Braun, Gene Kranz, Chris Kraft, Jack Garman, Margaret Hamilton, Sergei Korolev, Valentin Glushko, K. Sivan, Satish Dhawan, Bob Gilruth, Max Faget, Elon Musk (engineer role), Gwynne Shotwell.`,
+
+    failure: `You are ORBITIQ NEXUS. Generate ONE real aerospace failure or disaster record. ${avoid}
+Return ONLY this format:
+NAME: [incident name]
+DATE: [YYYY-MM-DD]
+VEHICLE: [vehicle involved]
+MISSION: [mission name]
+PHASE: [prelaunch|ascent|orbit|reentry|landing|ground]
+SEVERITY: [catastrophic|critical|major|minor]
+CREW_LOST: [number or 0]
+IMMEDIATE_CAUSE: [direct physical cause, one sentence]
+ROOT_CAUSE: [fundamental systemic cause, one sentence]
+CONTRIBUTING_FACTOR_1: [first contributing factor]
+CONTRIBUTING_FACTOR_2: [second contributing factor]
+INVESTIGATION_BOARD: [name of investigation body]
+KEY_DESIGN_CHANGE: [most important design change after]
+KEY_POLICY_CHANGE: [most important policy change after]
+LESSON: [primary lesson learned]
+Choose real failures: Challenger, Columbia, Apollo 1, N1 rocket failures, Ariane 5 first flight, Mars Climate Orbiter, Mars Polar Lander, Progress collision with Mir, Soyuz 1, Soyuz 11, X-15 crash, F-104 accidents, ValuJet 592, TWA 800.`,
+
+    lesson: `You are ORBITIQ NEXUS. Generate ONE real aerospace lesson learned from an actual incident. ${avoid}
+Return ONLY this format:
+TITLE: [concise lesson title]
+DOMAIN: [propulsion|structures|guidance|human_factors|org_culture|quality_assurance|mission_ops|design]
+SOURCE_INCIDENT: [the failure or event it came from]
+DATE_LEARNED: [year]
+DESCRIPTION: [what the lesson is, 2-3 sentences]
+ROOT_PATTERN: [underlying pattern: normalization_of_deviance|single_point_failure|inadequate_testing|communication_breakdown|schedule_pressure|design_margin|etc]
+CORRECTIVE_ACTION: [what was changed]
+APPLIED_TO: [later missions where this lesson was applied]
+STILL_RELEVANT: [YES/NO]
+CRITICALITY: [life_safety|mission_critical|operational|process]
+Generate from real aerospace history lessons documented by NASA, ESA, ISRO, or aviation safety boards.`,
+
+    tech: `You are ORBITIQ NEXUS. Generate ONE real aerospace technology record. ${avoid}
+Return ONLY this format:
+NAME: [technology name]
+CATEGORY: [propulsion|materials|guidance|avionics|life_support|communications|structures|sensors|manufacturing]
+COUNTRY: [origin country]
+ORGANIZATION: [developing organization]
+INTRODUCED: [year]
+TRL: [Technology Readiness Level 1-9]
+DESCRIPTION: [what it is and what problem it solves, 2 sentences]
+KEY_SPEC_1: [most important specification with value]
+KEY_SPEC_2: [second important specification]
+APPLICATIONS: [where it is used, comma separated]
+BREAKTHROUGH: [what made it revolutionary]
+SUCCESSOR: [next generation technology or NONE]
+CURRENT_STATUS: [active|retired|experimental|production]
+Choose real technologies: SSME, F-1 engine, Merlin engine, ion propulsion, AESA radar, GPS, carbon fiber composites, ablative heat shields, cryogenic propellant systems, autonomous GNC, solar electric propulsion, nuclear thermal propulsion, LIDAR docking, ML-based trajectory optimization.`,
+
+    forecast: `You are ORBITIQ NEXUS. Generate ONE real future aerospace program or forecast. ${avoid}
+Return ONLY this format:
+NAME: [program or technology name]
+TYPE: [crewed_mission|space_station|lunar_base|mars_mission|propulsion|satellite|defense|commercial]
+LEAD_NATION: [primary country]
+LEAD_AGENCY: [responsible organization]
+TARGET_DATE: [year or decade]
+CURRENT_STATUS: [concept|funded|development|test_phase|operational]
+BUDGET_EST_USD: [billions, number only]
+OBJECTIVE: [primary goal, one sentence]
+KEY_TECHNOLOGY: [enabling technology required]
+PROBABILITY: [high|medium|low]
+GEOPOLITICAL_SIGNIFICANCE: [strategic importance, one sentence]
+COMPETING_PROGRAMS: [rival programs, comma separated]
+TIMELINE_RISK: [main schedule risk factor]
+Choose real future programs: Artemis lunar base, Mars Sample Return, Starship Mars, Lunar Gateway, NGAD fighter, hypersonic weapons, Space Force programs, ISRO Gaganyaan, CNSA Moon base, nuclear propulsion NTP, eVTOL urban air mobility, quantum communications satellite.`
+  };
+  return prompts[type] || prompts.country;
+}
+
+// ── PARSE AI RESPONSE ─────────────────────────────────────────
+function parseRecord(raw, type) {
+  const record = { id: crypto.randomUUID(), type, phase: currentPhase, timestamp: new Date().toISOString(), fields: {}, relations: [] };
+  const lines = raw.split('\n');
+  for (const line of lines) {
+    const colon = line.indexOf(':');
+    if (colon > 0) {
+      const key = line.slice(0, colon).trim().toUpperCase();
+      const val = line.slice(colon + 1).trim();
+      if (key && val && val !== 'N/A' && val !== '') {
+        record.fields[key] = val;
+      }
+    }
+  }
+  // Derive display name
+  record.name = record.fields.NAME || record.fields.TITLE || record.fields.MISSION_NAME || `${type}_${Date.now()}`;
+  // Link relations from existing DB
+  record.relations = resolveRelations(record);
+  return record;
+}
+
+function resolveRelations(record) {
+  const rels = [];
+  const f = record.fields;
+  // Find matching records
+  const match = (field, targetTypes) => {
+    if (!f[field]) return;
+    const val = f[field].toLowerCase();
+    DB.records.filter(r => targetTypes.includes(r.type)).forEach(r => {
+      if (r.name.toLowerCase().includes(val.slice(0,6)) || val.includes(r.name.toLowerCase().slice(0,6))) {
+        rels.push({ id: r.id, name: r.name, type: r.type, rel: field });
+      }
+    });
+  };
+  match('COUNTRY', ['country']); match('LEAD_NATION', ['country']);
+  match('AGENCY', ['agency']); match('LEAD_AGENCY', ['agency']);
+  match('PROGRAM', ['program']); match('VEHICLE', ['vehicle']);
+  match('MISSION', ['mission']); match('SOURCE_INCIDENT', ['failure']);
+  match('ORGANIZATION', ['agency','org']);
+  return rels.slice(0, 6);
+}
+
+// ── ENTITY TYPE CONFIG ─────────────────────────────────────────
+const ET = {
+  country:  { label:'Country',    cls:'et-country',  icon:'🌍' },
+  agency:   { label:'Agency',     cls:'et-agency',   icon:'🏛️' },
+  org:      { label:'Company',    cls:'et-org',      icon:'🏢' },
+  mission:  { label:'Mission',    cls:'et-mission',  icon:'🚀' },
+  program:  { label:'Program',    cls:'et-program',  icon:'📋' },
+  vehicle:  { label:'Vehicle',    cls:'et-vehicle',  icon:'✈️' },
+  crew:     { label:'Crew',       cls:'et-crew',     icon:'👨‍🚀' },
+  engineer: { label:'Engineer',   cls:'et-engineer', icon:'⚙️' },
+  failure:  { label:'Failure',    cls:'et-failure',  icon:'⚠️' },
+  lesson:   { label:'Lesson',     cls:'et-lesson',   icon:'📚' },
+  tech:     { label:'Technology', cls:'et-tech',     icon:'🔬' },
+  forecast: { label:'Forecast',   cls:'et-forecast', icon:'🔭' },
+};
+
+// ── AI CALL ────────────────────────────────────────────────────
+async function callAI(type) {
+  const existing = DB.records.filter(r=>r.type===type).map(r=>r.name);
+  const prompt = getPrompt(type, existing);
+
+  const res = await fetch(PROXY, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 400,
+      system: 'You are ORBITIQ NEXUS database population engine. Return ONLY the structured data in the exact format requested. Real data only. No explanations.',
+      messages: [{ role:'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.content.map(b=>b.text||'').join('').trim();
+}
+
+// ── POPULATE ONE ───────────────────────────────────────────────
+let phaseQueue = [];
+let queueIndex = 0;
+
+async function populateOne(type) {
+  log(`Generating ${type} record...`, 'ai');
+  try {
+    const raw = await callAI(type);
+    const record = parseRecord(raw, type);
+    DB.records.push(record);
+
+    // Count relations
+    relationCount += record.relations.length;
+    document.getElementById('stat-relations').textContent = relationCount;
+
+    log(`✓ ${ET[type].icon} ${record.name}`, 'ok');
+    updateStats();
+    renderRecord(record);
+    return record;
+  } catch(e) {
+    log(`✗ ${type}: ${e.message}`, 'err');
+    return null;
+  }
+}
+
+// ── RUN PHASE ──────────────────────────────────────────────────
+async function populatePhase() {
+  if (running) return;
+  running = true;
+  const btn = document.getElementById('btn-run');
+  const btnNext = document.getElementById('btn-next');
+  btn.disabled = true; btnNext.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Populating…';
+
+  const phase = PHASES[currentPhase];
+  const entities = phase.entities;
+  log(`▶ Starting ${phase.name}`, 'info');
+
+  for (let i = 0; i < entities.length; i++) {
+    const type = entities[i];
+    const pct = Math.round((i/entities.length)*100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    await populateOne(type);
+    await sleep(800); // Rate limit
+  }
+
+  document.getElementById('prog-bar').style.width = '100%';
+  updatePhaseCount();
+  log(`✓ ${phase.name} complete — ${entities.length} records generated`, 'ok');
+
+  running = false;
+  btn.disabled = false; btnNext.disabled = false;
+  btn.innerHTML = '<i class="ti ti-check"></i> Phase Complete';
+  setTimeout(()=>{ btn.innerHTML = '<i class="ti ti-player-play"></i> Run Phase'; }, 3000);
+}
+
+async function populateNext() {
+  if (running) return;
+  const phase = PHASES[currentPhase];
+  const idx = DB.records.filter(r=>r.phase===currentPhase).length;
+  const type = phase.entities[idx % phase.entities.length];
+  await populateOne(type);
+  updatePhaseCount();
+}
+
+// ── UI HELPERS ─────────────────────────────────────────────────
+function selectPhase(n) {
+  currentPhase = n;
+  document.querySelectorAll('.phase-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById(`ph-btn-${n}`).classList.add('on');
+  const phase = PHASES[n];
+  document.getElementById('ctrl-title').textContent = phase.name;
+  document.getElementById('ctrl-sub').textContent = phase.sub;
+  document.getElementById('prog-bar').style.width = '0%';
+  document.getElementById('btn-run').innerHTML = '<i class="ti ti-player-play"></i> Run Phase';
+}
+
+function switchTab(el, tab) {
+  document.querySelectorAll('.etab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  activeTab = tab;
+  renderAll();
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = DB.records.length;
+  const phases = new Set(DB.records.map(r=>r.phase));
+  document.getElementById('stat-phase').textContent = `${phases.size}/5`;
+}
+
+function updatePhaseCount() {
+  for (let i=1; i<=5; i++) {
+    const count = DB.records.filter(r=>r.phase===i).length;
+    const el = document.getElementById(`ph-count-${i}`);
+    el.textContent = count + ' records';
+    if (count >= PHASES[i].entities.length) {
+      el.classList.add('done');
+    }
+  }
+}
+
+function clearPhase() {
+  DB.records = DB.records.filter(r=>r.phase!==currentPhase);
+  relationCount = DB.records.reduce((a,r)=>a+r.relations.length,0);
+  document.getElementById('stat-relations').textContent = relationCount;
+  updateStats(); updatePhaseCount(); renderAll();
+  log(`Cleared Phase ${currentPhase} records`, 'warn');
+}
+
+function clearLog() { document.getElementById('log-body').innerHTML = ''; }
+
+// ── RENDER ─────────────────────────────────────────────────────
+function renderAll() {
+  const filtered = activeTab === 'all' ? DB.records : DB.records.filter(r=>r.type===activeTab);
+  const container = document.getElementById('records-container');
+  const empty = document.getElementById('empty-state');
+  const grid = document.getElementById('records-grid');
+
+  if (DB.records.length === 0) {
+    container.style.display = 'none'; empty.style.display = 'flex'; return;
+  }
+  container.style.display = 'block'; empty.style.display = 'none';
+
+  const label = activeTab === 'all' ? 'All Records' : ET[activeTab]?.label || activeTab;
+  document.getElementById('records-title-text').textContent = label;
+  document.getElementById('records-count-badge').textContent = filtered.length;
+
+  grid.innerHTML = filtered.map(r => buildCardHTML(r)).join('');
+}
+
+function renderRecord(record) {
+  const container = document.getElementById('records-container');
+  const empty = document.getElementById('empty-state');
+  container.style.display = 'block'; empty.style.display = 'none';
+
+  if (activeTab !== 'all' && activeTab !== record.type) { updateCounts(); return; }
+
+  const grid = document.getElementById('records-grid');
+  const count = document.getElementById('records-count-badge');
+  const filtered = activeTab === 'all' ? DB.records : DB.records.filter(r=>r.type===activeTab);
+  count.textContent = filtered.length;
+
+  const div = document.createElement('div');
+  div.innerHTML = buildCardHTML(record);
+  grid.insertBefore(div.firstChild, grid.firstChild);
+}
+
+function updateCounts() {
+  const filtered = activeTab === 'all' ? DB.records : DB.records.filter(r=>r.type===activeTab);
+  const count = document.getElementById('records-count-badge');
+  if (count) count.textContent = filtered.length;
+}
+
+function buildCardHTML(r) {
+  const et = ET[r.type] || { label: r.type, cls:'et-org', icon:'📋' };
+  const fieldsHtml = Object.entries(r.fields).slice(0,12).map(([k,v])=>
+    `<div class="rec-field">
+      <span class="rec-fk">${k.replace(/_/g,' ')}</span>
+      <span class="rec-fv">${esc(v)}</span>
+    </div>`
+  ).join('');
+
+  const relsHtml = r.relations.length > 0 ? `
+    <div class="rec-rels">
+      <div class="rel-title">⬡ Linked Entities (${r.relations.length})</div>
+      <div class="rel-list">
+        ${r.relations.map(rel=>{
+          const ret = ET[rel.type] || { cls:'et-org' };
+          return `<span class="rel-chip ${ret.cls}" style="border-color:currentColor;opacity:.8" title="${esc(rel.rel)}">${esc(rel.name)}</span>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  return `<div class="rec-card" id="card-${r.id}">
+    <div class="rec-card-hdr" onclick="toggleCard('${r.id}')">
+      <span class="rec-entity-type ${et.cls}">${et.icon} ${et.label}</span>
+      <span class="rec-name">${esc(r.name)}</span>
+      <span class="rec-id">${r.id.slice(0,8)}</span>
+    </div>
+    <div class="rec-body" id="body-${r.id}">
+      <div class="rec-fields">${fieldsHtml}</div>
+      ${relsHtml}
+    </div>
+  </div>`;
+}
+
+function toggleCard(id) {
+  const body = document.getElementById(`body-${id}`);
+  if (body) body.classList.toggle('open');
+}
+
+// ── LOG ────────────────────────────────────────────────────────
+function log(msg, type='info') {
+  const lb = document.getElementById('log-body');
+  const ts = new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const div = document.createElement('div');
+  div.className = `log-entry log-${type}`;
+  div.textContent = `${ts} ${msg}`;
+  lb.appendChild(div);
+  lb.scrollTop = lb.scrollHeight;
+}
+
+// ── EXPORT ────────────────────────────────────────────────────
+function exportDB() {
+  const blob = new Blob([JSON.stringify({ records: DB.records, relations: DB.relations, exportDate: new Date().toISOString(), totalRecords: DB.records.length }, null, 2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `ORBITIQ_NEXUS_DB_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  log('Database exported as JSON', 'ok');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Spin animation
+const style = document.createElement('style');
+style.textContent = '@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
+document.head.appendChild(style);
+
+// Init log
+log('NEXUS Population Engine initialized', 'info');
+log('Select a phase and click Run Phase to begin', 'info');
+log(`Proxy: ${PROXY}`, 'info');
+</script>
+</body>
+</html>
